@@ -1,10 +1,9 @@
 import React from "react";
-import "../styles/login.css"; // Import the CSS file
+import "../styles/login.css";
 
 const Login = () => {
   return (
     <div className="container">
-      {/* Left Section */}
       <div className="leftPanel">
         <h1 className="logo">MoneyUP</h1>
         <h2 className="welcomeText">Welcome Back!</h2>
@@ -24,7 +23,6 @@ const Login = () => {
         </p>
       </div>
 
-      {/* Right Section */}
       <div className="rightPanel"></div>
     </div>
   );

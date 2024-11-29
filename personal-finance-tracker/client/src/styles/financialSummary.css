@@ -1,0 +1,48 @@
+.financial-summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  color: #ffffff;
+  background-color: #1e1e2d;
+}
+
+.summary-item {
+  flex: 1;
+  margin: 0 10px;
+  padding: 15px;
+  background-color: #28293d;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #2d3748;
+}
+
+.summary-item h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #9fa2b4;
+}
+
+.summary-item p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #4caf50;
+}
+
+.net-balance p {
+  color: #4caf50;
+}
+
+.current-balance p {
+  color: #f39c12;
+}
+
+.current-balance span {
+  display: block;
+  font-size: 14px;
+  margin-top: 5px;
+  color: #e74c3c;
+}
+
+.expenses p {
+  color: #e74c3c;
+}

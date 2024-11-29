@@ -1,0 +1,20 @@
+.dashboard-container {
+  background-color: #1e1e2d;
+  display: flex;
+  height: 100vh;
+}
+
+.dashboard-content {
+  flex: 1;
+  transition: padding-left 0.3s ease;
+  background-color: #edf2f7;
+  overflow: auto;
+}
+
+.open-sidebar {
+  padding-left: 16rem;
+}
+
+.closed-sidebar {
+  padding-left: 5rem;
+}
