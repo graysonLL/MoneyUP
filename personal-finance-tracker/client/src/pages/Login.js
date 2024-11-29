@@ -1,30 +1,33 @@
+// src/pages/Login.js
 import React from "react";
-import "../styles/login.css";
+import LeftRightPanel from "../component/LeftRightPanel";
+import LoginForm from "../component/LoginForm";
 
 const Login = () => {
-  return (
-    <div className="container">
-      <div className="leftPanel">
-        <h1 className="logo">MoneyUP</h1>
-        <h2 className="welcomeText">Welcome Back!</h2>
-        <form className="form">
-          <input type="email" placeholder="Email" className="input" />
-          <input type="password" placeholder="Password" className="input" />
-          <a href="#" className="forgotPassword">
-            Forgot password?
-          </a>
-          <button className="loginButton">Log In</button>
-        </form>
-        <p className="signUpText">
-          Don’t have an account?{" "}
-          <a href="#" className="signUpLink">
-            Sign up
-          </a>
-        </p>
-      </div>
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // Handle login logic here (e.g., API call)
+  };
 
-      <div className="rightPanel"></div>
-    </div>
+  return (
+    <LeftRightPanel>
+      {{
+        leftPanel: (
+          <>
+            <h1 className="logo">MoneyUP</h1>
+            <h2 className="welcomeText">Welcome Back!</h2>
+            <LoginForm onSubmit={handleLogin} />
+            <p className="signUpText">
+              Don’t have an account?{" "}
+              <a href="/signup" className="signUpLink">
+                Sign up
+              </a>
+            </p>
+          </>
+        ),
+        rightPanel: <div className="rightPanelContent"></div>, // You can add anything to the right panel here
+      }}
+    </LeftRightPanel>
   );
 };
 
