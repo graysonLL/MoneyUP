@@ -4,7 +4,6 @@ import "../../styles/registerform.css";
 const RegisterForm = ({ onSubmit }) => {
   return (
     <form className="form" onSubmit={onSubmit}>
-      <input type="text" placeholder="Number" className="input" required />
       <input type="email" placeholder="Email" className="input" required />
       <input
         type="password"
