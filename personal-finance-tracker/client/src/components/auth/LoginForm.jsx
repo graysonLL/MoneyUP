@@ -1,14 +1,43 @@
 // src/components/LoginForm.js
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/loginform.css";
+
 const LoginForm = ({ onSubmit }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
   return (
-    <form className="form" onSubmit={onSubmit}>
-      <input type="email" placeholder="Email" className="input" required />
+    <form className="form" onSubmit={handleSubmit}>
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        className="input"
+        value={formData.email}
+        onChange={handleChange}
+        required
+      />
       <input
         type="password"
+        name="password"
         placeholder="Password"
         className="input"
+        value={formData.password}
+        onChange={handleChange}
         required
       />
       <a href="#" className="forgotPassword">
