@@ -1,14 +1,25 @@
-.expense-container {
+.expenses-content-wrapper {
+  width: auto;
+  margin-left: 260px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  transition: margin-left 0.3s ease;
+}
+
+.expenses-content-wrapper.sidebar-closed {
+  margin-left: 80px; /* Width of closed sidebar */
+}
+
+.expenses-container {
   padding: 2rem;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
-.expense-header {
-  width: 60%;
+.expenses-header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,12 +27,12 @@
   margin-top: 1rem;
 }
 
-.expense-header h1 {
+.expenses-header h1 {
   color: white;
   font-size: 1.5rem;
 }
 
-.add-expense-btn {
+.add-expenses-btn {
   background: #9333ea;
   color: white;
   border: none;
@@ -31,81 +42,100 @@
   transition: background-color 0.2s;
 }
 
-.add-expense-btn:hover {
+.pagination-numbers {
+  gap: 0.5rem;
+}
+
+.add-expenses-btn:hover {
   background: #7e22ce;
 }
 
-.expense-table-container {
+.expenses-table-container {
   background: #1e2330;
   border-radius: 0.5rem;
   overflow-x: auto;
-  width: 60%;
+  width: 100%;
 }
 
-.expense-table {
+.expenses-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 600px;
 }
 
-.expense-table th,
-.expense-table td {
+.expenses-table th,
+.expenses-table td {
   padding: 1rem;
   text-align: left;
   color: #94a3b8;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.expense-table th {
+.expenses-table th {
   font-weight: 500;
   color: #64748b;
   background: rgba(0, 0, 0, 0.2);
 }
 
-.expense-table td.amount {
-  color: #ef4444;
+.expenses-table td.amount {
+  color: #4ade80;
   font-weight: 500;
+  font-size: 1.2rem;
 }
 
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .expense-container {
+  .expenses-content-wrapper,
+  .expenses-content-wrapper.sidebar-closed {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .expenses-container {
     padding: 1rem;
   }
 
-  .expense-header {
+  .expenses-header,
+  .expenses-table-container,
+  .expenses-trend-container {
+    width: 100%;
+  }
+
+  .expenses-header {
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
   }
 
-  .expense-table-container {
+  .expenses-table-container {
     margin-top: 1rem;
     border-radius: 0.375rem;
   }
 
-  .expense-table th,
-  .expense-table td {
+  .expenses-table th,
+  .expenses-table td {
     padding: 0.75rem;
     font-size: 0.875rem;
   }
 }
 
-.expense-pagination {
+.expenses-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   padding: 1rem;
 }
 
-.expense-pagination-numbers {
+.expenses-pagination-numbers {
   display: flex;
   gap: 0.5rem;
 }
 
-.expense-pagination-btn,
-.expense-pagination-number {
+.expenses-pagination-btn,
+.expenses-pagination-number {
   padding: 0.5rem 1rem;
   background: #1e2330;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -115,23 +145,72 @@
   transition: all 0.2s;
 }
 
-.expense-pagination-btn:hover:not(.disabled),
-.expense-pagination-number:hover:not(.active) {
+.expenses-pagination-btn:hover:not(.disabled),
+.expenses-pagination-number:hover:not(.active) {
   background: #2d3748;
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.expense-pagination-number.active {
+.expenses-pagination-number.active {
   background: #9333ea;
   color: white;
   border-color: #9333ea;
 }
 
-.expense-pagination-btn.disabled {
+.expenses-pagination-btn.disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.expense-table tbody {
+.expenses-table tbody {
   transition: opacity 0.2s;
+}
+
+.expenses-trend-container {
+  background: #1e2330;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.expenses-trend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.expenses-trend-header h2 {
+  color: white;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.time-frame-select {
+  padding: 0.5rem 1rem;
+  background: #1e2330;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.375rem;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.time-frame-select:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.expense-trend-container {
+  background: #1e2330;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+.expense-trend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
