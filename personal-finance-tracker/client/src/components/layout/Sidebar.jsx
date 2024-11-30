@@ -1,7 +1,11 @@
 import {
   HomeIcon,
-  ChartPieIcon,
-  UserIcon,
+  BanknotesIcon,
+  CreditCardIcon,
+  ScaleIcon,
+  ArrowsRightLeftIcon,
+  ChartBarIcon,
+  UserCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
@@ -17,11 +21,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   const menuItems = [
     { name: "Dashboard", icon: HomeIcon, path: "/dashboard" },
-    { name: "Expenses", icon: ChartPieIcon, path: "/expenses" },
-    { name: "Balance", icon: ChartPieIcon, path: "/balance" },
-    { name: "Transactions", icon: ChartPieIcon, path: "/transactions" },
-    { name: "Summaries", icon: ChartPieIcon, path: "/summaries" },
-    { name: "Profile", icon: UserIcon, path: "/profile" },
+    { name: "Income", icon: BanknotesIcon, path: "/expenses" },
+    { name: "Expenses", icon: CreditCardIcon, path: "/expenses" },
+    { name: "Balance", icon: ScaleIcon, path: "/balance" },
+    { name: "Transactions", icon: ArrowsRightLeftIcon, path: "/transactions" },
+    { name: "Summaries", icon: ChartBarIcon, path: "/summaries" },
+    { name: "Profile", icon: UserCircleIcon, path: "/profile" },
   ];
 
   const handleCollapseToggle = () => {
@@ -57,7 +62,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       </button>
 
       <div className="sidebar-content">
-        <nav className="nav">
+        <nav className="navSideBar">
           {menuItems.map((item) => (
             <Link
               key={item.name}
@@ -74,10 +79,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </Link>
           ))}
         </nav>
-
-        <div className="logout-container">
-          <LogoutButton isCollapsed={isCollapsed} />
-        </div>
       </div>
     </div>
   );
