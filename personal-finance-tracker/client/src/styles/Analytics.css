@@ -3,7 +3,9 @@
   width: auto;
   margin-left: 250px;
   transition: margin-left 0.3s ease;
+  height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .analytics-container.sidebar-closed {
@@ -30,7 +32,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .analytics-header h1 {
@@ -69,6 +71,13 @@
   width: 100% !important;
   height: auto !important;
   max-height: 400px;
+}
+
+.trend-container {
+  width: 100%;
+  grid-column: span 2;
+  margin-right: 0;
+  margin-top: 2rem;
 }
 
 @media (max-width: 1200px) {

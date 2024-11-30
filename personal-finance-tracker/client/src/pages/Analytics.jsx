@@ -2,6 +2,7 @@ import React from "react";
 import FinancialMetric from "../components/analytics/FinancialMetric";
 import IncomeExpensesChart from "../components/analytics/IncomeExpensesChart";
 import ExpensesCategoryChart from "../components/analytics/ExpensesCategoryChart";
+import TrendChart from "../components/analytics/TrendChart";
 import "../styles/Analytics.css";
 
 function Analytics({ isSidebarOpen }) {
@@ -47,6 +48,9 @@ function Analytics({ isSidebarOpen }) {
           <div className="chart-container">
             <h2>Expenses by Category</h2>
             <ExpensesCategoryChart />
+          </div>
+          <div className="trend-container">
+            <TrendChart />
           </div>
         </div>
       </div>
