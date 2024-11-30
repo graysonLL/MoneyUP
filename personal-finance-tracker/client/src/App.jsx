@@ -4,6 +4,8 @@ import Dashboard from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/Signup";
+import Income from "./pages/Income";
+import Expenses from "./pages/Expenses";
 
 function App() {
   const isAuthenticated = true;
@@ -20,6 +22,30 @@ function App() {
           isAuthenticated ? (
             <AppLayout>
               <Dashboard />
+            </AppLayout>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/income"
+        element={
+          isAuthenticated ? (
+            <AppLayout>
+              <Income />
+            </AppLayout>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/expenses"
+        element={
+          isAuthenticated ? (
+            <AppLayout>
+              <Expenses />
             </AppLayout>
           ) : (
             <Navigate to="/login" />

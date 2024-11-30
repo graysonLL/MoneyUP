@@ -21,7 +21,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   const menuItems = [
     { name: "Dashboard", icon: HomeIcon, path: "/dashboard" },
-    { name: "Income", icon: BanknotesIcon, path: "/expenses" },
+    { name: "Income", icon: BanknotesIcon, path: "/income" },
     { name: "Expenses", icon: CreditCardIcon, path: "/expenses" },
     { name: "Balance", icon: ScaleIcon, path: "/balance" },
     { name: "Transactions", icon: ArrowsRightLeftIcon, path: "/transactions" },

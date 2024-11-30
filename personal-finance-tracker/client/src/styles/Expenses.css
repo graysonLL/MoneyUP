@@ -1,0 +1,92 @@
+.expense-container {
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.expense-header {
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.expense-header h1 {
+  color: white;
+  font-size: 1.5rem;
+}
+
+.add-expense-btn {
+  background: #9333ea;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-expense-btn:hover {
+  background: #7e22ce;
+}
+
+.expense-table-container {
+  background: #1e2330;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  width: 60%;
+}
+
+.expense-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.expense-table th,
+.expense-table td {
+  padding: 1rem;
+  text-align: left;
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.expense-table th {
+  font-weight: 500;
+  color: #64748b;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.expense-table td.amount {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .expense-container {
+    padding: 1rem;
+  }
+
+  .expense-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .expense-table-container {
+    margin-top: 1rem;
+    border-radius: 0.375rem;
+  }
+
+  .expense-table th,
+  .expense-table td {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+}
