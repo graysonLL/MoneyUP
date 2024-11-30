@@ -148,7 +148,7 @@ function Expenses({ isSidebarOpen }) {
     >
       <div className="expenses-container">
         <div className="expenses-header">
-          <h1>expenses</h1>
+          <h1>Expenses</h1>
           <button className="add-expenses-btn">- Add expenses</button>
         </div>
 

@@ -2,9 +2,7 @@ import {
   HomeIcon,
   BanknotesIcon,
   CreditCardIcon,
-  ScaleIcon,
   ArrowsRightLeftIcon,
-  ChartBarIcon,
   UserCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -22,9 +20,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: "Dashboard", icon: HomeIcon, path: "/dashboard" },
     { name: "Income", icon: BanknotesIcon, path: "/income" },
     { name: "Expenses", icon: CreditCardIcon, path: "/expenses" },
-    { name: "Balance", icon: ScaleIcon, path: "/balance" },
     { name: "Analytics", icon: ArrowsRightLeftIcon, path: "/analytics" },
-    { name: "Summaries", icon: ChartBarIcon, path: "/summaries" },
     { name: "Profile", icon: UserCircleIcon, path: "/profile" },
   ];
 
