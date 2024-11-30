@@ -4,19 +4,20 @@
   box-sizing: border-box;
 }
 
-body {
-  background-color: #1e1e2d;
-  color: #ffffff;
-  font-family: "Arial", sans-serif;
-}
-
 html,
 body,
 #root {
-  height: 100%;
+  height: 100vh;
+  width: 100%;
+}
+
+body {
+  background-color: #1a1b26;
+  color: #ffffff;
+  font-family: "Arial", sans-serif;
+  overflow: hidden; /* Prevent scrolling on the body */
 }
 
 #root {
   display: flex;
-  flex-direction: column;
 }

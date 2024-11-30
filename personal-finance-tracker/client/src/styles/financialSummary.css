@@ -1,48 +1,43 @@
 .financial-summary {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  color: #ffffff;
-  background-color: #1e1e2d;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
 }
 
-.summary-item {
-  flex: 1;
-  margin: 0 10px;
-  padding: 15px;
-  background-color: #28293d;
-  border-radius: 8px;
-  text-align: center;
-  background-color: #2d3748;
+.summary-card {
+  background-color: rgba(45, 55, 72, 0.5);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  height: 100%;
 }
 
-.summary-item h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #9fa2b4;
+/* Rest of the styles remain the same */
+
+.summary-card h2 {
+  color: #718096;
+  font-size: 0.875rem;
+  font-weight: normal;
+  margin-bottom: 0.5rem;
 }
 
-.summary-item p {
-  font-size: 20px;
+.amount {
+  font-size: 1.5rem;
   font-weight: bold;
-  color: #4caf50;
 }
 
-.net-balance p {
-  color: #4caf50;
+.amount.green {
+  color: #4ade80;
+}
+.amount.orange {
+  color: #f59e0b;
+}
+.amount.red {
+  color: #ef4444;
 }
 
-.current-balance p {
-  color: #f39c12;
-}
-
-.current-balance span {
-  display: block;
-  font-size: 14px;
-  margin-top: 5px;
-  color: #e74c3c;
-}
-
-.expenses p {
-  color: #e74c3c;
+.timestamp {
+  color: #ef4444;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
 }

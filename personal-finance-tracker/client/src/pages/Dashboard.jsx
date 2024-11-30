@@ -1,24 +1,21 @@
-import React, { useState } from "react";
-import Sidebar from "../components/dashboard/Sidebar";
+import React from "react";
+import LowBalanceWarning from "../components/dashboard/LowBalanceWarning";
 import FinancialSummary from "../components/dashboard/FinancialSummary";
 import RecentUpdates from "../components/dashboard/RecentUpdates";
-import "../styles/dashboard.css";
+import "../styles/Dashboard.css";
 
-const Dashboard = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+const Dashboard = ({ isSidebarOpen }) => {
+  const currentBalance = 900;
 
   return (
-    <div className="dashboard-container">
-      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-      <div
-        className={`dashboard-content ${
-          isSidebarOpen ? "open-sidebar" : "closed-sidebar"
-        }`}
-      >
+    <div className={`dashboard ${isSidebarOpen ? "" : "sidebar-closed"}`}>
+      <div className="dashboard-content">
+        <LowBalanceWarning currentBalance={currentBalance} />
         <FinancialSummary />
         <RecentUpdates />
       </div>
     </div>
   );
 };
+
 export default Dashboard;

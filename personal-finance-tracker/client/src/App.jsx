@@ -1,18 +1,38 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import AppLayout from "./layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/Login";
+import SignupPage from "./pages/Signup";
 
 function App() {
+  const isAuthenticated = true;
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+
+      <Route
+        path="/dashboard"
+        element={
+          isAuthenticated ? (
+            <AppLayout>
+              <Dashboard />
+            </AppLayout>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/analytics"
+        element={
+          isAuthenticated ? <AppLayout></AppLayout> : <Navigate to="/login" />
+        }
+      />
+    </Routes>
   );
 }
 

@@ -1,7 +1,7 @@
 // src/pages/Login.js
 import React from "react";
-import LeftRightPanel from "../component/LeftRightPanel";
-import LoginForm from "../component/LoginForm";
+import LeftRightPanel from "../components/auth/LeftRightPanel";
+import LoginForm from "../components/auth/LoginForm";
 
 const Login = () => {
   const handleLogin = (e) => {

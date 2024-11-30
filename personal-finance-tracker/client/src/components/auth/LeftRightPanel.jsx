@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/LeftRightPanel.css";
+import "../../styles/LeftRightPanel.css";
 const LeftRightPanel = ({ children }) => {
   return (
     <div className="container">

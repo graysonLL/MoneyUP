@@ -1,82 +1,109 @@
-.recentUpdates {
-  background-color: #1e1e2d;
-  padding: 30px;
-  height: auto;
+.recent-updates {
+  background-color: rgba(45, 55, 72, 0.5);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  flex: 1; /* Take up remaining space */
+  min-height: 0; /* Allow container to scroll */
+  display: flex;
+  flex-direction: column;
 }
 
-.recentUpdatesContentContainer {
-  background-color: #2d3748;
-  border-radius: 8px;
-  color: #ffffff;
+.updates-table-container {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
-.recentUpdatesTitle {
-  font-size: 18px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  color: #9fa2b4;
-  border-bottom: 1px solid #4a5568;
-  padding: 20px;
+.updates-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.recentUpdatesTable {
+.updates-header h2 {
+  color: #718096;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.updates-filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.updates-filters select {
+  background-color: rgba(45, 55, 72, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.375rem;
+  color: white;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.updates-table {
   width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
 }
 
-.recentUpdatesTableTitles {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right: 30px;
-  padding-left: 30px;
-  display: flex;
-  justify-content: space-between;
-  color: #9fa2b4;
-  text-transform: uppercase;
-  font-size: 14px;
-}
-
-.recentUpdatesTableTitles > div {
-  flex: 1;
+.updates-table th {
+  color: #718096;
+  font-weight: normal;
   text-align: left;
+  padding: 0.75rem;
+  font-size: 0.875rem;
 }
 
-.recentUpdatesTableItems {
-  padding-bottom: 20px;
+.updates-table td {
+  padding: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
-.recentUpdatesRow {
+.type-expense {
+  color: #ef4444;
+}
+.type-income {
+  color: #4ade80;
+}
+
+.amount-expense {
+  color: #ef4444;
+}
+.amount-income {
+  color: #4ade80;
+}
+
+.pagination {
   display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #4a5568;
-  padding: 30px;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
 }
 
-.recentUpdatesRow > div {
-  flex: 1;
-  text-align: left;
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #2c3e50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.recentUpdatesRow:last-child {
-  border-bottom: none;
+.pagination button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
 }
 
-.expense {
-  color: #e74c3c;
+.pagination button:hover:not(:disabled) {
+  background-color: #34495e;
 }
 
-.expense-amount {
-  color: #e74c3c;
-}
-
-.income {
-  color: #4caf50;
-}
-
-.income-amount {
-  color: #4caf50;
-}
-
-.recentUpdatesRow:hover {
-  background-color: #4a5568;
+.current-page {
+  color: #95a5a6;
 }

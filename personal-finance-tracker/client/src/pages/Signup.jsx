@@ -1,7 +1,7 @@
 // src/pages/Signup.js
 import React from "react";
-import LeftRightPanel from "../component/LeftRightPanel";  // Correct path to LeftRightPanel
-import RegisterForm from "../component/RegisterForm";  // Correct path to RegisterForm
+import LeftRightPanel from "../components/auth/LeftRightPanel";
+import RegisterForm from "../components/auth/RegisterForm";
 
 const Signup = () => {
   const handleRegister = (e) => {
@@ -35,6 +35,5 @@ const Signup = () => {
 };
 
 /* src/styles/login.css or create signup.css */
-
 
 export default Signup;

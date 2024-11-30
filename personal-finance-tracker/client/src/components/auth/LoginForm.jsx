@@ -1,6 +1,6 @@
 // src/components/LoginForm.js
 import React from "react";
-import "../styles/loginform.css";
+import "../../styles/loginform.css";
 const LoginForm = ({ onSubmit }) => {
   return (
     <form className="form" onSubmit={onSubmit}>

@@ -39,6 +39,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         isCollapsed ? "collapsed" : "expanded"
       }`}
     >
+      <div className={`sidebar-logo ${isCollapsed ? "collapsed-logo" : ""}`}>
+        {isCollapsed ? (
+          <span className="logo-highlight">M</span>
+        ) : (
+          <>
+            Money<span className="logo-highlight">Up</span>
+          </>
+        )}
+      </div>
       <button onClick={handleCollapseToggle} className="collapse-btn">
         {isCollapsed ? (
           <ChevronRightIcon className="icon" />

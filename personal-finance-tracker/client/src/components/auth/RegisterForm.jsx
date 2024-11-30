@@ -1,6 +1,6 @@
 // src/components/RegisterForm.js
 import React from "react";
-import "../styles/registerform.css";
+import "../../styles/registerform.css";
 const RegisterForm = ({ onSubmit }) => {
   return (
     <form className="form" onSubmit={onSubmit}>

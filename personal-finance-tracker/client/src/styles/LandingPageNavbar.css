@@ -1,0 +1,54 @@
+.logoNavbarLanding {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.highlight {
+  color: #9333ea;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.login-text {
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.login-text:hover {
+  color: #9333ea;
+}
+
+.signup-btn {
+  padding: 0.5rem 1.5rem;
+  background: #9333ea;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.signup-btn:hover {
+  background: #7e22ce;
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    padding: 1rem 1.5rem;
+  }
+
+  .nav-buttons {
+    gap: 1rem;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
+}
