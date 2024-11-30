@@ -6,6 +6,7 @@ import LoginPage from "./pages/Login";
 import SignupPage from "./pages/Signup";
 import Income from "./pages/Income";
 import Expenses from "./pages/Expenses";
+import Profile from "./pages/Profile";
 
 function App() {
   const isAuthenticated = true;
@@ -49,6 +50,18 @@ function App() {
             </AppLayout>
           ) : (
             <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          isAuthenticated ? (
+            <AppLayout>
+              <Profile />
+            </AppLayout>
+          ) : (
+            <Navigate to="/profile" />
           )
         }
       />
