@@ -80,6 +80,13 @@
   margin-top: 2rem;
 }
 
+.trend-chart-container {
+  background-color: #1e2330;
+  padding: 1rem;
+  height: 88%;
+  border-radius: 0.5rem;
+}
+
 @media (max-width: 1200px) {
   .metrics-grid {
     grid-template-columns: repeat(2, 1fr);
