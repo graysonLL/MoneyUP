@@ -1,13 +1,13 @@
 .dashboard-container {
   background-color: #1e1e2d;
   display: flex;
-  height: 100vh;
+  height: auto;
 }
 
 .dashboard-content {
   flex: 1;
   transition: padding-left 0.3s ease;
-  background-color: #edf2f7;
+  background-color: #1e1e2d;
   overflow: auto;
 }
 

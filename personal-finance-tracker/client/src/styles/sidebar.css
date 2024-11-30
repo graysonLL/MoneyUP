@@ -27,8 +27,8 @@
 
 .collapse-btn {
   position: absolute;
+  top: 50%;
   right: -1rem;
-  top: 2.5rem;
   background-color: #2d3748;
   color: #cbd5e0;
   padding: 0.25rem;
@@ -36,6 +36,7 @@
   border: 1px solid #4a5568;
   cursor: pointer;
   transition: color 0.3s ease;
+  transform: translateY(-50%);
 }
 
 .collapse-btn:hover {

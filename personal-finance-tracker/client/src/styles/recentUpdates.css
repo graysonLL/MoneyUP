@@ -1,7 +1,7 @@
 .recentUpdates {
   background-color: #1e1e2d;
   padding: 30px;
-  height: 100%;
+  height: auto;
 }
 
 .recentUpdatesContentContainer {

@@ -50,6 +50,48 @@ const RecentUpdates = () => {
               <div>initial_balance</div>
               <div>11/29/2024 03:05 PM</div>
             </div>
+            <div className="recentUpdatesRow">
+              <div className="income">income</div>
+              <div className="income-amount">₱5,000.00</div>
+              <div>Initial Balance</div>
+              <div>initial_balance</div>
+              <div>11/29/2024 03:05 PM</div>
+            </div>
+            <div className="recentUpdatesRow">
+              <div className="income">income</div>
+              <div className="income-amount">₱5,000.00</div>
+              <div>Initial Balance</div>
+              <div>initial_balance</div>
+              <div>11/29/2024 03:05 PM</div>
+            </div>
+            <div className="recentUpdatesRow">
+              <div className="income">income</div>
+              <div className="income-amount">₱5,000.00</div>
+              <div>Initial Balance</div>
+              <div>initial_balance</div>
+              <div>11/29/2024 03:05 PM</div>
+            </div>
+            <div className="recentUpdatesRow">
+              <div className="income">income</div>
+              <div className="income-amount">₱5,000.00</div>
+              <div>Initial Balance</div>
+              <div>initial_balance</div>
+              <div>11/29/2024 03:05 PM</div>
+            </div>
+            <div className="recentUpdatesRow">
+              <div className="income">income</div>
+              <div className="income-amount">₱5,000.00</div>
+              <div>Initial Balance</div>
+              <div>initial_balance</div>
+              <div>11/29/2024 03:05 PM</div>
+            </div>
+            <div className="recentUpdatesRow">
+              <div className="income">income</div>
+              <div className="income-amount">₱5,000.00</div>
+              <div>Initial Balance</div>
+              <div>initial_balance</div>
+              <div>11/29/2024 03:05 PM</div>
+            </div>
           </div>
         </div>
       </div>
