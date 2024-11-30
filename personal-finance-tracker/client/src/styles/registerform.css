@@ -1,5 +1,3 @@
-/* src/styles/login.css */
-/* src/styles/login.css or create signup.css */
 .accountDescription {
   font-size: 16px;
   margin-top: -20px;
@@ -9,61 +7,61 @@
 }
 
 .logo {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    position: absolute; /* Position it relative to the parent */
-    top: 40px; /* Distance from the top */
-    left: 40px; /* Distance from the left */
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  position: absolute;
+  top: 40px;
+  left: 40px;
 }
 
 .welcomeText {
-    font-size: 64px;
-    margin-bottom: 30px;
+  font-size: 64px;
+  margin-bottom: 30px;
 }
 
 .form {
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 16px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
 }
 
 .forgotPassword {
-    align-self: flex-end;
-    margin-bottom: 20px;
-    text-decoration: none;
-    font-size: 14px;
-    color: #007bff;
+  align-self: flex-end;
+  margin-bottom: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #007bff;
 }
 
 .registerButton {
-    width: 107%;
-    padding: 12px;
-    background-color: green;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+  width: 107%;
+  padding: 12px;
+  background-color: green;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .signUpText {
-    margin-top: 20px;
-    font-size: 14px;
+  margin-top: 20px;
+  font-size: 14px;
 }
 
 .signUpLink {
-    color: #007bff;
-    text-decoration: none;
+  color: #007bff;
+  text-decoration: none;
 }

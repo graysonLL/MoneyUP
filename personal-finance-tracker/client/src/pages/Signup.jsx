@@ -1,4 +1,3 @@
-// src/pages/Signup.js
 import React from "react";
 import LeftRightPanel from "../components/auth/LeftRightPanel";
 import RegisterForm from "../components/auth/RegisterForm";
@@ -6,7 +5,6 @@ import RegisterForm from "../components/auth/RegisterForm";
 const Signup = () => {
   const handleRegister = (e) => {
     e.preventDefault();
-    // Handle registration logic here (e.g., API call)
   };
 
   return (
@@ -28,12 +26,10 @@ const Signup = () => {
             </p>
           </>
         ),
-        rightPanel: <div className="rightPanelContent"></div>, // You can add content here for the right panel
+        rightPanel: <div className="rightPanelContent"></div>,
       }}
     </LeftRightPanel>
   );
 };
-
-/* src/styles/login.css or create signup.css */
 
 export default Signup;

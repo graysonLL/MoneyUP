@@ -117,23 +117,19 @@ function Income({ isSidebarOpen }) {
     },
   ];
 
-  // Calculate pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = incomeData.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(incomeData.length / itemsPerPage);
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Previous page
   const previousPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1); // Fixed: changed + to -
+      setCurrentPage(currentPage - 1);
     }
   };
 
-  // Next page
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);

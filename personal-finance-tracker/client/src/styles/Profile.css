@@ -79,7 +79,6 @@
   cursor: not-allowed;
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .profile-container {
     padding: 1rem;

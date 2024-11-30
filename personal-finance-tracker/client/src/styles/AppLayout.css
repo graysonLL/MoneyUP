@@ -8,6 +8,6 @@
 .main-container {
   flex: 1;
   height: 100vh;
-  padding-top: 60px; /* Height of navbar */
+  padding-top: 60px;
   overflow: hidden;
 }

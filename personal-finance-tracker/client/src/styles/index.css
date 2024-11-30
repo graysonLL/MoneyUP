@@ -15,7 +15,7 @@ body {
   background-color: #1a1b26;
   color: #ffffff;
   font-family: "Arial", sans-serif;
-  overflow: hidden; /* Prevent scrolling on the body */
+  overflow: hidden;
 }
 
 #root {

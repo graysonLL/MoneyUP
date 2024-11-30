@@ -198,14 +198,38 @@ const RecentUpdates = () => {
         </tbody>
       </table>
 
-      <div className="pagination">
-        <button onClick={handlePrevPage} disabled={currentPage === 1}>
+      <div className="recentupdates-pagination">
+        <button
+          onClick={handlePrevPage}
+          disabled={currentPage === 1}
+          className={`recentupdates-pagination-btn ${
+            currentPage === 1 ? "disabled" : ""
+          }`}
+        >
           Previous
         </button>
-        <span className="current-page">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+
+        <div className="recentupdates-pagination-numbers">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+            <button
+              key={number}
+              onClick={() => setCurrentPage(number)}
+              className={`recentupdates-pagination-number ${
+                currentPage === number ? "active" : ""
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className={`recentupdates-pagination-btn ${
+            currentPage === totalPages ? "disabled" : ""
+          }`}
+        >
           Next
         </button>
       </div>

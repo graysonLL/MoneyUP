@@ -6,7 +6,6 @@ import LoginForm from "../components/auth/LoginForm";
 const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
-    // Handle login logic here (e.g., API call)
   };
 
   return (
@@ -25,7 +24,7 @@ const Login = () => {
             </p>
           </>
         ),
-        rightPanel: <div className="rightPanelContent"></div>, // You can add anything to the right panel here
+        rightPanel: <div className="rightPanelContent"></div>,
       }}
     </LeftRightPanel>
   );
