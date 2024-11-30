@@ -7,6 +7,7 @@ import SignupPage from "./pages/Signup";
 import Income from "./pages/Income";
 import Expenses from "./pages/Expenses";
 import Profile from "./pages/Profile";
+import Analytics from "./pages/Analytics";
 
 function App() {
   const isAuthenticated = true;
@@ -68,7 +69,13 @@ function App() {
       <Route
         path="/analytics"
         element={
-          isAuthenticated ? <AppLayout></AppLayout> : <Navigate to="/login" />
+          isAuthenticated ? (
+            <AppLayout>
+              <Analytics />
+            </AppLayout>
+          ) : (
+            <Navigate to="/profile" />
+          )
         }
       />
     </Routes>

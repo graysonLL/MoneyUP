@@ -13,7 +13,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
 import "../../styles/sidebar.css";
-import LogoutButton from "./LogoutButton";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -24,7 +23,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: "Income", icon: BanknotesIcon, path: "/income" },
     { name: "Expenses", icon: CreditCardIcon, path: "/expenses" },
     { name: "Balance", icon: ScaleIcon, path: "/balance" },
-    { name: "Transactions", icon: ArrowsRightLeftIcon, path: "/transactions" },
+    { name: "Analytics", icon: ArrowsRightLeftIcon, path: "/analytics" },
     { name: "Summaries", icon: ChartBarIcon, path: "/summaries" },
     { name: "Profile", icon: UserCircleIcon, path: "/profile" },
   ];

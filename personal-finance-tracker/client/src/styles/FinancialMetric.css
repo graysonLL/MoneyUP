@@ -1,0 +1,32 @@
+.metric-card {
+  background: #1e2330;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.metric-card h3 {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.metric-income .metric-value {
+  color: #4ade80;
+}
+
+.metric-expense .metric-value {
+  color: #ef4444;
+}
+
+.metric-savings .metric-value {
+  color: #3b82f6;
+}
+
+.metric-rate .metric-value {
+  color: #f59e0b;
+}
