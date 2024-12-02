@@ -4,6 +4,8 @@ import "../../styles/registerform.css";
 
 const RegisterForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -27,6 +29,24 @@ const RegisterForm = ({ onSubmit }) => {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        name="firstName"
+        placeholder="First Name"
+        className="input"
+        value={formData.firstName}
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="text"
+        name="lastName"
+        placeholder="Last Name"
+        className="input"
+        value={formData.lastName}
+        onChange={handleChange}
+        required
+      />
       <input
         type="email"
         name="email"
