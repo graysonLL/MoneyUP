@@ -1,6 +1,7 @@
 // src/components/LoginForm.js
 import React, { useState } from "react";
 import "../../styles/loginform.css";
+import { authService } from "../../services/authService";
 
 const LoginForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -15,9 +16,14 @@ const LoginForm = ({ onSubmit }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    try {
+      const response = await authService.login(formData);
+      console.log("Login successful:", response);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   return (

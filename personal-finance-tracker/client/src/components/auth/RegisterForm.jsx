@@ -1,6 +1,7 @@
 // src/components/RegisterForm.js
 import React, { useState } from "react";
 import "../../styles/registerform.css";
+import { authService } from "../../services/authService";
 
 const RegisterForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -18,13 +19,18 @@ const RegisterForm = ({ onSubmit }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    onSubmit(formData);
+    try {
+      const response = await authService.register(formData);
+      console.log("Registration successful:", response);
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
 
   return (
