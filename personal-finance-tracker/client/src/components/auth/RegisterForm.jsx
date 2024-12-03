@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import "../../styles/registerform.css";
 import { authService } from "../../services/authService";
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const RegisterForm = ({ onSubmit }) => {
     password: "",
     confirmPassword: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -28,6 +31,8 @@ const RegisterForm = ({ onSubmit }) => {
     try {
       const response = await authService.register(formData);
       console.log("Registration successful:", response);
+      alert("Registration successful! You may now login!");
+      navigate('/login');
     } catch (error) {
       console.error("Registration failed:", error);
     }
