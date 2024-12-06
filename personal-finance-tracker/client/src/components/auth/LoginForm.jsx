@@ -3,14 +3,16 @@ import React, { useState } from "react";
 import "../../styles/loginform.css";
 import { authService } from "../../services/authService";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -24,6 +26,7 @@ const LoginForm = ({ onSubmit }) => {
     try {
       const response = await authService.login(formData);
       console.log("Login successful:", response);
+      login(response.user);
       navigate('/dashboard');
     } catch (error) {
       console.error("Login failed:", error);

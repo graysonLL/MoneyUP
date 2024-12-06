@@ -8,9 +8,10 @@ import Income from "./pages/Income";
 import Expenses from "./pages/Expenses";
 import Profile from "./pages/Profile";
 import Analytics from "./pages/Analytics";
+import { useAuth } from './contexts/AuthContext';
 
 function App() {
-  const isAuthenticated = true;
+  const { isAuthenticated } = useAuth();
 
   return (
     <Routes>
