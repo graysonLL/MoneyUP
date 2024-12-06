@@ -1,0 +1,112 @@
+.hamburger-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #2d3748;
+  z-index: 1000;
+}
+
+.hamburger-button {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+.hamburger-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.hamburger-username {
+  color: #4ade80;
+  font-weight: 500;
+}
+
+.hamburger-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  backdrop-filter: blur(2px);
+}
+
+.hamburger-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background-color: #2d3748;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1002;
+  padding-top: 60px;
+}
+
+.hamburger-menu.open {
+  transform: translateX(0);
+}
+
+.hamburger-menu-content {
+  padding: 0.5rem 0;
+}
+
+.hamburger-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  color: #a0aec0; /* Lighter gray for default text */
+  gap: 1rem;
+  transition: all 0.2s;
+  margin: 0.25rem 0;
+}
+
+.hamburger-menu-item:hover {
+  background-color: #252b3d; /* Slightly lighter than background for hover */
+  color: #fff;
+}
+
+.hamburger-menu-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.hamburger-active-item {
+  background-color: #252b3d; /* Same as hover */
+  color: #fff;
+  position: relative;
+}
+
+/* Add highlight bar for active item */
+.hamburger-active-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #8b5cf6; /* Green highlight */
+}
+
+.mobile-content {
+  padding-top: 60px;
+  background-color: #1a1f2e;
+  min-height: 100vh;
+}
+
+/* Ensure icons match the text color */
+.hamburger-menu-item .hamburger-menu-icon {
+  color: currentColor;
+}
