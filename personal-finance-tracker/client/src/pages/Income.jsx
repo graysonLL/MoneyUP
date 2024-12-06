@@ -1,126 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IncomeTrendChart from "../components/income/IncomeTrendChart";
+import IncomeModal from "../components/income/IncomeModal";
 import "../styles/Income.css";
+import {useAuth} from "../contexts/AuthContext";
+import axios from 'axios';
 
 function Income({ isSidebarOpen }) {
+  const {user} = useAuth();
+  console.log(user);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [incomes, setIncomes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const itemsPerPage = 10;
 
-  const incomeData = [
-    {
-      amount: "+₱200.00",
-      description: "dfgh",
-      category: "Business",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-    {
-      amount: "+₱5,000.00",
-      description: "Initial Balance",
-      category: "Investments",
-      date: "11/30/2024",
-    },
-  ];
+  // Fetch incomes when component mounts
+  useEffect(() => {
+    const fetchIncomes = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        const response = await axios.get(`http://localhost:3001/api/income/user/${user.id}`);
+        setIncomes(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch incomes');
+        setLoading(false);
+      }
+    };
+
+    fetchIncomes();
+  }, []);
+
+  const handleModalSubmit = (newIncome) => {
+    setIncomes(prevIncomes => [newIncome, ...prevIncomes]);
+    setIsModalOpen(false);
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = incomeData.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(incomeData.length / itemsPerPage);
+  const currentItems = incomes.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(incomes.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -145,8 +68,16 @@ function Income({ isSidebarOpen }) {
       <div className="income-container">
         <div className="income-header">
           <h1>Income</h1>
-          <button className="add-income-btn">+ Add Income</button>
+          <button className="add-income-btn" onClick={() => setIsModalOpen(true)}>
+            + Add Income
+          </button>
         </div>
+
+        <IncomeModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleModalSubmit}
+        />
 
         <div className="income-table-container">
           <table className="income-table">
@@ -159,12 +90,12 @@ function Income({ isSidebarOpen }) {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((income, index) => (
-                <tr key={index}>
-                  <td className="amount">{income.amount}</td>
+              {currentItems.map((income) => (
+                <tr key={income.income_id}>
+                  <td className="amount">₱{Number(income.amount).toFixed(2)}</td>
                   <td>{income.description}</td>
-                  <td>{income.category}</td>
-                  <td>{income.date}</td>
+                  <td>{income.category.name}</td>
+                  <td>{new Date(income.date).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>
@@ -208,7 +139,7 @@ function Income({ isSidebarOpen }) {
             Next
           </button>
         </div>
-        <IncomeTrendChart />
+        <IncomeTrendChart userId={user.id} incomes={incomes} />
       </div>
     </div>
   );

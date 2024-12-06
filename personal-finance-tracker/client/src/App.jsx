@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import Analytics from "./pages/Analytics";
 import { useAuth } from './contexts/AuthContext';
 
+
 function App() {
   const { isAuthenticated } = useAuth();
 
