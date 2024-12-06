@@ -124,7 +124,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1rem;
   }
 
   .profile-content-container {
