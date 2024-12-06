@@ -79,6 +79,41 @@
   cursor: not-allowed;
 }
 
+.save-changes-profile-button {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.save-changes-profile-button:hover {
+  background-color: #16a34a;
+}
+
+.cancel-button-profile {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.cancel-button-profile:hover {
+  background-color: #dc2626;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
 @media (max-width: 768px) {
   .profile-container {
     padding: 1rem;
