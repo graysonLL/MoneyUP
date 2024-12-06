@@ -3,7 +3,6 @@
   width: auto;
   margin-left: 250px;
   transition: margin-left 0.3s ease;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
 }
