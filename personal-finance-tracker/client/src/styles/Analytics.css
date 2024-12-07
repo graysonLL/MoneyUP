@@ -3,7 +3,6 @@
   width: auto;
   margin-left: 250px;
   transition: margin-left 0.3s ease;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -103,10 +102,22 @@
   }
 
   .charts-grid {
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr;
+  }
+
+  .chart-container {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    width: 100%;
   }
 
   .metrics-grid {
     grid-template-columns: 1fr;
+  }
+
+  .trend-container {
+    margin-top: 0;
+    margin-bottom: 2vh;
   }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
 function DisplayAccountDetails() {
   const [userDetails, setUserDetails] = useState({
@@ -28,7 +29,7 @@ function DisplayAccountDetails() {
         return;
       }
 
-      const response = await fetch("http://localhost:3001/api/auth/user", {
+      const response = await fetch("/api/auth/user", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -70,21 +71,18 @@ function DisplayAccountDetails() {
         return;
       }
 
-      const response = await fetch(
-        "http://localhost:3001/api/auth/update-profile",
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-          }),
-        }
-      );
+      const response = await fetch("/api/auth/update-profile", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+        }),
+      });
 
       console.log("Response status:", response.status);
       const data = await response.json();
