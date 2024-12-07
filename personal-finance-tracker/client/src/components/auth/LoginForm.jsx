@@ -1,8 +1,8 @@
 // src/components/LoginForm.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/loginform.css";
 import { authService } from "../../services/authService";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const LoginForm = () => {
@@ -12,7 +12,11 @@ const LoginForm = () => {
   });
 
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleChange = (e) => {
     setFormData({

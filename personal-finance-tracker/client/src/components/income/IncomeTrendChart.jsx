@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -21,29 +21,81 @@ ChartJS.register(
   Legend
 );
 
-const IncomeTrendChart = () => {
+const IncomeTrendChart = ({ userId, incomes }) => {
   const [timeFrame, setTimeFrame] = useState("day");
+  const [trendData, setTrendData] = useState({
+    day: { labels: [], income: [] },
+    month: { labels: [], income: [] },
+    year: { labels: [], income: [] }
+  });
 
-  const trendData = {
-    day: {
-      labels: [
-        "2024-11-25",
-        "2024-11-26",
-        "2024-11-27",
-        "2024-11-28",
-        "2024-11-29",
-        "2024-11-30",
-      ],
-      income: [0, 0, 2000, 5000, 50000, 305200],
-    },
-    month: {
-      labels: ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov"],
-      income: [150000, 180000, 200000, 220000, 250000, 305200],
-    },
-    year: {
-      labels: ["2019", "2020", "2021", "2022", "2023", "2024"],
-      income: [500000, 800000, 1200000, 1500000, 2000000, 2500000],
-    },
+  useEffect(() => {
+    if (incomes && incomes.length > 0) {
+      const processedData = processIncomeData(incomes);
+      setTrendData(processedData);
+    }
+  }, [incomes]);
+
+  const processIncomeData = (incomes) => {
+    const now = new Date();
+    const data = {
+      day: { labels: [], income: [] },
+      month: { labels: [], income: [] },
+      year: { labels: [], income: [] }
+    };
+
+    // Process daily data (last 7 days)
+    const dailyData = new Map();
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(now);
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      dailyData.set(dateStr, 0);
+    }
+
+    // Process monthly data (last 6 months)
+    const monthlyData = new Map();
+    for (let i = 5; i >= 0; i--) {
+      const date = new Date(now);
+      date.setMonth(date.getMonth() - i);
+      const monthStr = date.toLocaleString('default', { month: 'short' });
+      monthlyData.set(monthStr, 0);
+    }
+
+    // Process yearly data (last 6 years)
+    const yearlyData = new Map();
+    for (let i = 5; i >= 0; i--) {
+      const year = now.getFullYear() - i;
+      yearlyData.set(year.toString(), 0);
+    }
+
+    // Aggregate income data
+    incomes.forEach(income => {
+      const date = new Date(income.date);
+      const dateStr = date.toISOString().split('T')[0];
+      const monthStr = date.toLocaleString('default', { month: 'short' });
+      const yearStr = date.getFullYear().toString();
+
+      if (dailyData.has(dateStr)) {
+        dailyData.set(dateStr, (dailyData.get(dateStr) || 0) + Number(income.amount));
+      }
+      if (monthlyData.has(monthStr)) {
+        monthlyData.set(monthStr, (monthlyData.get(monthStr) || 0) + Number(income.amount));
+      }
+      if (yearlyData.has(yearStr)) {
+        yearlyData.set(yearStr, (yearlyData.get(yearStr) || 0) + Number(income.amount));
+      }
+    });
+
+    // Convert Maps to arrays for Chart.js
+    data.day.labels = Array.from(dailyData.keys());
+    data.day.income = Array.from(dailyData.values());
+    data.month.labels = Array.from(monthlyData.keys());
+    data.month.income = Array.from(monthlyData.values());
+    data.year.labels = Array.from(yearlyData.keys());
+    data.year.income = Array.from(yearlyData.values());
+
+    return data;
   };
 
   const options = {
