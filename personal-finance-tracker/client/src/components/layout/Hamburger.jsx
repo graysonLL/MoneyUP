@@ -63,6 +63,9 @@ function Hamburger({ username }) {
 
       {/* Slide Menu */}
       <div className={`hamburger-menu ${isMenuOpen ? "open" : ""}`}>
+        <div className="sidebar-logo-hamburger">
+          Money<span className="logo-highlight">Up</span>
+        </div>
         <div className="hamburger-menu-content">
           {menuItems.map((item) => (
             <Link
