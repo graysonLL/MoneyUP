@@ -64,7 +64,7 @@ function App() {
               <Profile />
             </AppLayout>
           ) : (
-            <Navigate to="/profile" />
+            <Navigate to="/login" />
           )
         }
       />
@@ -76,7 +76,7 @@ function App() {
               <Analytics />
             </AppLayout>
           ) : (
-            <Navigate to="/profile" />
+            <Navigate to="/login" />
           )
         }
       />

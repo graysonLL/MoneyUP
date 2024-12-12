@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../contexts/AuthContext';
 import "../../styles/Navbar.css";
 
 function Navbar({ username }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
-
+  const {logout} = useAuth();
   const handleLogout = () => {
-    navigate("/login");
+    console.log("HandleLogout called");
+    logout();
+    setIsDropdownOpen(false);
+    navigate('/login');
+    console.log("After navigation");
   };
 
   return (

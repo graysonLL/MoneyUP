@@ -9,6 +9,8 @@ import {
   Bars3Icon,
 } from "@heroicons/react/24/outline";
 import "../../styles/Hamburger.css";
+import { useAuth } from '../../contexts/AuthContext';
+
 
 function Hamburger({ username }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,8 +18,13 @@ function Hamburger({ username }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
+  const {logout} = useAuth();
   const handleLogout = () => {
-    navigate("/login");
+    console.log("HandleLogout called");
+    logout();
+    setIsDropdownOpen(false);
+    navigate('/login');
+    console.log("After navigation");
   };
 
   const menuItems = [
