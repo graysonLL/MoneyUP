@@ -1,56 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import React, { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 
 function DisplayAccountDetails() {
-  const [userDetails, setUserDetails] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-  });
+  const { user, login } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
   });
-
-  useEffect(() => {
-    fetchUserDetails();
-  }, []);
-
-  const fetchUserDetails = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("Please log in to view your profile");
-        setLoading(false);
-        return;
-      }
-
-      const response = await fetch("/api/auth/user", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch profile");
-      }
-
-      const data = await response.json();
-      setUserDetails(data);
-      setFormData(data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Profile fetch error:", error);
-      setError("Failed to load profile. Please try logging in again.");
-      setLoading(false);
-    }
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,9 +21,6 @@ function DisplayAccountDetails() {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
-      console.log("Submitting with token:", token ? "Present" : "Missing");
-      console.log("Form data:", formData);
-
       if (!token) {
         alert("Please log in again");
         return;
@@ -77,20 +32,14 @@ function DisplayAccountDetails() {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-        }),
+        body: JSON.stringify(formData),
       });
 
-      console.log("Response status:", response.status);
       const data = await response.json();
-      console.log("Response data:", data);
 
       if (response.ok) {
+        login(data.user);
         alert("Profile updated successfully!");
-        setUserDetails(data.user);
         setIsEditing(false);
       } else {
         alert(data.message || "Failed to update profile");
@@ -101,8 +50,7 @@ function DisplayAccountDetails() {
     }
   };
 
-  if (loading) return <div className="loading">Loading profile...</div>;
-  if (error) return <div className="error-message">{error}</div>;
+  if (!user) return <div className="error-message">Please log in to view your profile</div>;
 
   return (
     <div className="profile-container">
@@ -130,7 +78,7 @@ function DisplayAccountDetails() {
                     className="cancel-button-profile"
                     onClick={() => {
                       setIsEditing(false);
-                      setFormData(userDetails);
+                      setFormData(user);
                     }}
                   >
                     Cancel
@@ -146,7 +94,7 @@ function DisplayAccountDetails() {
               <input
                 type="text"
                 name="firstName"
-                value={isEditing ? formData.firstName : userDetails.firstName}
+                value={isEditing ? formData.firstName : user.firstName}
                 onChange={handleChange}
                 disabled={!isEditing}
                 className="profile-input"
@@ -158,7 +106,7 @@ function DisplayAccountDetails() {
               <input
                 type="text"
                 name="lastName"
-                value={isEditing ? formData.lastName : userDetails.lastName}
+                value={isEditing ? formData.lastName : user.lastName}
                 onChange={handleChange}
                 disabled={!isEditing}
                 className="profile-input"
@@ -170,7 +118,7 @@ function DisplayAccountDetails() {
               <input
                 type="email"
                 name="email"
-                value={isEditing ? formData.email : userDetails.email}
+                value={isEditing ? formData.email : user.email}
                 onChange={handleChange}
                 disabled={!isEditing}
                 className="profile-input"
