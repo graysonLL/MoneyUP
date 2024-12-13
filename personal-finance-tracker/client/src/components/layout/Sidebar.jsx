@@ -6,6 +6,7 @@ import {
   UserCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  FlagIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
@@ -21,6 +22,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: "Income", icon: BanknotesIcon, path: "/income" },
     { name: "Expenses", icon: CreditCardIcon, path: "/expenses" },
     { name: "Analytics", icon: ArrowsRightLeftIcon, path: "/analytics" },
+    { name: "Goals", icon: FlagIcon, path: "/goals" },
     { name: "Profile", icon: UserCircleIcon, path: "/profile" },
   ];
 
