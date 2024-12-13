@@ -8,6 +8,7 @@ import Income from "./pages/Income";
 import Expenses from "./pages/Expenses";
 import Profile from "./pages/Profile";
 import Analytics from "./pages/Analytics";
+import Goals from "./pages/Goals";
 import { useAuth } from './contexts/AuthContext';
 
 
@@ -50,6 +51,18 @@ function App() {
           isAuthenticated ? (
             <AppLayout>
               <Expenses />
+            </AppLayout>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/goals"
+        element={
+          isAuthenticated ? (
+            <AppLayout>
+              <Goals />
             </AppLayout>
           ) : (
             <Navigate to="/login" />
