@@ -5,6 +5,7 @@
   transition: margin-left 0.3s ease;
   overflow-x: hidden;
   overflow-y: auto;
+  height: 100%;
 }
 
 .analytics-container.sidebar-closed {
