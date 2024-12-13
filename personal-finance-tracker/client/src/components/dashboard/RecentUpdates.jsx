@@ -1,157 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/RecentUpdates.css";
 
 const RecentUpdates = () => {
-  const transactions = [
-    {
-      type: "expense",
-      amount: 1000.0,
-      description: "CAriz sdf",
-      category: "Utilities",
-      date: "11/30/2024",
-      time: "10:18 AM",
-    },
-    {
-      type: "income",
-      amount: 5000.0,
-      description: "Salary",
-      category: "Work",
-      date: "11/29/2024",
-      time: "09:00 AM",
-    },
-    {
-      type: "expense",
-      amount: 750.0,
-      description: "Groceries",
-      category: "Food",
-      date: "11/28/2024",
-      time: "03:45 PM",
-    },
-    {
-      type: "expense",
-      amount: 2500.0,
-      description: "Rent Payment",
-      category: "Housing",
-      date: "11/28/2024",
-      time: "10:00 AM",
-    },
-    {
-      type: "income",
-      amount: 2000.0,
-      description: "Freelance Work",
-      category: "Side Income",
-      date: "11/27/2024",
-      time: "02:30 PM",
-    },
-    {
-      type: "expense",
-      amount: 300.0,
-      description: "Internet Bill",
-      category: "Utilities",
-      date: "11/26/2024",
-      time: "11:20 AM",
-    },
-    {
-      type: "expense",
-      amount: 1500.0,
-      description: "Phone Bill",
-      category: "Utilities",
-      date: "11/25/2024",
-      time: "04:15 PM",
-    },
-    {
-      type: "income",
-      amount: 3000.0,
-      description: "Project Payment",
-      category: "Work",
-      date: "11/24/2024",
-      time: "01:00 PM",
-    },
-    {
-      type: "expense",
-      amount: 800.0,
-      description: "Restaurant",
-      category: "Food",
-      date: "11/23/2024",
-      time: "08:45 PM",
-    },
-    {
-      type: "expense",
-      amount: 1200.0,
-      description: "Electric Bill",
-      category: "Utilities",
-      date: "11/22/2024",
-      time: "09:30 AM",
-    },
-    {
-      type: "expense",
-      amount: 1200.0,
-      description: "Electric Bill",
-      category: "Utilities",
-      date: "11/22/2024",
-      time: "09:30 AM",
-    },
-    {
-      type: "expense",
-      amount: 1200.0,
-      description: "Electric Bill",
-      category: "Utilities",
-      date: "11/22/2024",
-      time: "09:30 AM",
-    },
-    {
-      type: "expense",
-      amount: 1200.0,
-      description: "Electric Bill",
-      category: "Utilities",
-      date: "11/22/2024",
-      time: "09:30 AM",
-    },
-    {
-      type: "expense",
-      amount: 1200.0,
-      description: "Electric Bill",
-      category: "Utilities",
-      date: "11/22/2024",
-      time: "09:30 AM",
-    },
-    {
-      type: "expense",
-      amount: 1200.0,
-      description: "Electric Bill",
-      category: "Utilities",
-      date: "11/22/2024",
-      time: "09:30 AM",
-    },
-    {
-      type: "expense",
-      amount: 1200.0,
-      description: "Electric Bill",
-      category: "Utilities",
-      date: "11/22/2024",
-      time: "09:30 AM",
-    },
-  ];
+  const [transactions, setTransactions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(7);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
 
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [itemsPerPage] = React.useState(7);
+  useEffect(() => {
+    fetchTransactions();
+  }, [currentPage]);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTransactions = transactions.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
-
-  const totalPages = Math.ceil(transactions.length / itemsPerPage);
+  const fetchTransactions = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch(
+        `http://localhost:3001/api/transactions?page=${currentPage}&limit=${itemsPerPage}`
+      );
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to fetch transactions');
+      }
+      
+      const { data, hasMore } = await response.json();
+      
+      if (!Array.isArray(data)) {
+        throw new Error('Invalid data format received');
+      }
+      
+      setTransactions(data);
+      setHasMore(hasMore);
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
 
   const handleNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    if (hasMore) {
+      setCurrentPage((prev) => prev + 1);
+    }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="recent-updates">
@@ -181,7 +89,7 @@ const RecentUpdates = () => {
           </tr>
         </thead>
         <tbody>
-          {currentTransactions.map((transaction, index) => (
+          {transactions.map((transaction, index) => (
             <tr key={index}>
               <td className={`type-${transaction.type}`}>{transaction.type}</td>
               <td className={`amount-${transaction.type}`}>
@@ -209,25 +117,13 @@ const RecentUpdates = () => {
           Previous
         </button>
 
-        <div className="recentupdates-pagination-numbers">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-            <button
-              key={number}
-              onClick={() => setCurrentPage(number)}
-              className={`recentupdates-pagination-number ${
-                currentPage === number ? "active" : ""
-              }`}
-            >
-              {number}
-            </button>
-          ))}
-        </div>
+        <span className="page-info">Page {currentPage}</span>
 
         <button
           onClick={handleNextPage}
-          disabled={currentPage === totalPages}
+          disabled={!hasMore}
           className={`recentupdates-pagination-btn ${
-            currentPage === totalPages ? "disabled" : ""
+            !hasMore ? "disabled" : ""
           }`}
         >
           Next

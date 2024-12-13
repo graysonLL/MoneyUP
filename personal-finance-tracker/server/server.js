@@ -22,22 +22,15 @@ app.use("/api/expense", expenseRoutes);
 const categoryRoutes = require("./routes/expenseRoutes");
 app.use("/api/category", categoryRoutes);
 
+const transactionRoutes = require("./routes/transactionRoutes");
+app.use("/api/transactions", transactionRoutes);
+
 app.get("/", (req, res) => {
   res.send("Welcome to the Personal Finance Tracker API!");
 });
 
 app.get("/api/test", (req, res) => {
   res.json({ message: "API is working" });
-});
-
-app.get("/api/transactions", async (req, res) => {
-  try {
-    const transactions = await prisma.transaction.findMany();
-    res.status(200).json(transactions);
-  } catch (err) {
-    console.error("Error fetching transactions:", err);
-    res.status(500).json({ error: "Error fetching transactions" });
-  }
 });
 
 app.get("/api/categories", async (req, res) => {
@@ -49,6 +42,8 @@ app.get("/api/categories", async (req, res) => {
     res.status(500).json({ error: "Error fetching categories" });
   }
 });
+
+
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
