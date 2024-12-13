@@ -140,40 +140,32 @@ const authController = {
   },
 
   updateProfile: async (req, res) => {
-    console.log("Update profile route hit", req.body);
     try {
-      const token = req.headers.authorization?.split(" ")[1];
-      if (!token) {
-        return res.status(401).json({ message: "No token provided" });
-      }
+      const { firstName, lastName, email } = req.body;
+      const userId = req.user.id; // Get from auth middleware
 
-      const decoded = jwt.verify(
-        token,
-        process.env.JWT_SECRET || "fallback-secret-key"
-      );
-      console.log("Decoded token:", decoded);
+      console.log('Updating profile for user:', userId);
+      console.log('Update data:', { firstName, lastName, email });
 
       const updatedUser = await prisma.user.update({
-        where: { user_id: decoded.userId },
+        where: {
+          id: parseInt(userId)
+        },
         data: {
-          first_name: req.body.firstName,
-          last_name: req.body.lastName,
-          email: req.body.email,
-        },
+          firstName,
+          lastName,
+          email
+        }
       });
-      console.log("User updated:", updatedUser);
 
-      res.json({
-        message: "Profile updated successfully",
-        user: {
-          firstName: updatedUser.first_name,
-          lastName: updatedUser.last_name,
-          email: updatedUser.email,
-        },
-      });
+      // Remove sensitive information
+      const { password, ...userWithoutPassword } = updatedUser;
+      
+      console.log('Profile updated successfully:', userWithoutPassword);
+      res.status(200).json({ user: userWithoutPassword });
     } catch (error) {
-      console.error("Update error:", error);
-      res.status(400).json({ message: "Failed to update profile", error: error.message });
+      console.error('Error updating profile:', error);
+      res.status(500).json({ error: 'Failed to update profile' });
     }
   }
 };

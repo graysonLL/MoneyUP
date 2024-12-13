@@ -26,7 +26,9 @@ function DisplayAccountDetails() {
         return;
       }
 
-      const response = await fetch("/api/auth/update-profile", {
+      console.log('Submitting update with data:', formData);
+
+      const response = await fetch("http://localhost:3001/api/auth/update-profile", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -35,18 +37,18 @@ function DisplayAccountDetails() {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        login(data.user);
-        alert("Profile updated successfully!");
-        setIsEditing(false);
-      } else {
-        alert(data.message || "Failed to update profile");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update profile');
       }
+
+      const data = await response.json();
+      login(data.user);
+      alert("Profile updated successfully!");
+      setIsEditing(false);
     } catch (error) {
       console.error("Error:", error);
-      alert("Error updating profile");
+      alert(error.message || "Error updating profile");
     }
   };
 
