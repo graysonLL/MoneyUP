@@ -7,7 +7,55 @@ const prisma = new PrismaClient();
 const presetCategories = [
   // Income categories
   { name: 'Salary', type: 'income' },
-  // ... rest of your preset categories ...
+  { name: 'Freelance', type: 'income' },
+  { name: 'Investments', type: 'income' },
+  { name: 'Rental Income', type: 'income' },
+  { name: 'Bonus', type: 'income' },
+  { name: 'Side Hustle', type: 'income' },
+  { name: 'Gift', type: 'income' },
+  
+  // Essential Expenses
+  { name: 'Rent/Mortgage', type: 'expense' },
+  { name: 'Utilities', type: 'expense' },
+  { name: 'Groceries', type: 'expense' },
+  { name: 'Transportation', type: 'expense' },
+  { name: 'Insurance', type: 'expense' },
+  { name: 'Healthcare', type: 'expense' },
+  
+  // Lifestyle
+  { name: 'Dining Out', type: 'expense' },
+  { name: 'Entertainment', type: 'expense' },
+  { name: 'Shopping', type: 'expense' },
+  { name: 'Travel', type: 'expense' },
+  { name: 'Hobbies', type: 'expense' },
+  
+  // Personal Care
+  { name: 'Health & Fitness', type: 'expense' },
+  { name: 'Personal Care', type: 'expense' },
+  { name: 'Clothing', type: 'expense' },
+  
+  // Home & Family
+  { name: 'Home Maintenance', type: 'expense' },
+  { name: 'Pet Care', type: 'expense' },
+  { name: 'Child Care', type: 'expense' },
+  { name: 'Education', type: 'expense' },
+  
+  // Technology & Services
+  { name: 'Phone', type: 'expense' },
+  { name: 'Internet', type: 'expense' },
+  { name: 'Streaming Services', type: 'expense' },
+  { name: 'Software Subscriptions', type: 'expense' },
+  
+  // Financial
+  { name: 'Savings', type: 'expense' },
+  { name: 'Investments', type: 'expense' },
+  { name: 'Debt Payment', type: 'expense' },
+  { name: 'Banking Fees', type: 'expense' },
+  
+  // Miscellaneous
+  { name: 'Gifts', type: 'expense' },
+  { name: 'Donations', type: 'expense' },
+  { name: 'Other', type: 'expense' }
 ];
 
 const authController = {

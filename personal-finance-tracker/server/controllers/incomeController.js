@@ -13,7 +13,8 @@ const incomeController = {
                     category_id: parseInt(category_id),
                     description,
                     date: new Date(date),
-                    user_id: parseInt(user_id)
+                    user_id: parseInt(user_id),
+                    created_at: new Date()
                 },
                 include: {
                     category: true

@@ -5,6 +5,8 @@ const getTransactions = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
+    const type = req.query.type || 'all';
+    const sort = req.query.sort || 'latest';
     const skip = (page - 1) * limit;
 
     // Get both incomes and expenses
@@ -22,8 +24,9 @@ const getTransactions = async (req, res) => {
             }
           }
         },
+        ...(type === 'income' ? {} : type === 'expense' ? { where: { income_id: -1 } } : {}),
         orderBy: {
-          created_at: 'desc'
+          created_at: sort === 'latest' ? 'desc' : 'asc'
         }
       }),
       prisma.expense.findMany({
@@ -39,14 +42,15 @@ const getTransactions = async (req, res) => {
             }
           }
         },
+        ...(type === 'expense' ? {} : type === 'income' ? { where: { expense_id: -1 } } : {}),
         orderBy: {
-          created_at: 'desc'
+          created_at: sort === 'latest' ? 'desc' : 'asc'
         }
       })
     ]);
 
     // Combine and format the transactions
-    const allTransactions = [
+    let allTransactions = [
       ...incomes.map(income => ({
         id: income.income_id,
         amount: Number(income.amount),
@@ -65,27 +69,27 @@ const getTransactions = async (req, res) => {
         created_at: expense.created_at,
         type: 'expense'
       }))
-    ].sort((a, b) => b.created_at - a.created_at);
+    ];
 
-    // Apply pagination
+    // Sort combined results
+    allTransactions.sort((a, b) => {
+      if (sort === 'latest') {
+        return b.created_at - a.created_at;
+      }
+      return a.created_at - b.created_at;
+    });
+
+    // Paginate results
+    const total = allTransactions.length;
     const paginatedTransactions = allTransactions.slice(skip, skip + limit);
-    const totalItems = allTransactions.length;
-    const hasMore = skip + limit < totalItems;
 
     res.json({
       data: paginatedTransactions,
-      page,
-      limit,
-      hasMore,
-      totalItems,
+      hasMore: skip + limit < total
     });
-
   } catch (error) {
-    console.error('Transaction fetch error:', error);
-    res.status(500).json({
-      error: 'Failed to fetch transactions',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
-    });
+    console.error('Error in getTransactions:', error);
+    res.status(500).json({ error: 'Failed to fetch transactions' });
   }
 };
 

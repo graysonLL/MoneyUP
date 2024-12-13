@@ -8,10 +8,14 @@ const RecentUpdates = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+  const [filters, setFilters] = useState({
+    type: 'all',
+    sort: 'latest'
+  });
 
   useEffect(() => {
     fetchTransactions();
-  }, [currentPage]);
+  }, [currentPage, filters]);
 
   const fetchTransactions = async () => {
     try {
@@ -19,7 +23,7 @@ const RecentUpdates = () => {
       setError(null);
       
       const response = await fetch(
-        `http://localhost:3001/api/transactions?page=${currentPage}&limit=${itemsPerPage}`
+        `http://localhost:3001/api/transactions?page=${currentPage}&limit=${itemsPerPage}&type=${filters.type}&sort=${filters.sort}`
       );
       
       if (!response.ok) {
@@ -41,6 +45,15 @@ const RecentUpdates = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    setCurrentPage(1);
   };
 
   const handlePrevPage = () => {
@@ -66,12 +79,20 @@ const RecentUpdates = () => {
       <div className="updates-header">
         <h2>Recent Updates</h2>
         <div className="updates-filters">
-          <select defaultValue="all">
+          <select 
+            name="type"
+            value={filters.type}
+            onChange={handleFilterChange}
+          >
             <option value="all">All Transactions</option>
             <option value="income">Income</option>
             <option value="expense">Expenses</option>
           </select>
-          <select defaultValue="latest">
+          <select 
+            name="sort"
+            value={filters.sort}
+            onChange={handleFilterChange}
+          >
             <option value="latest">Latest First</option>
             <option value="oldest">Oldest First</option>
           </select>
@@ -99,7 +120,11 @@ const RecentUpdates = () => {
               <td>{transaction.description}</td>
               <td>{transaction.category}</td>
               <td>
-                {transaction.date} {transaction.time}
+                {new Date(transaction.date).toLocaleDateString('en-PH', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
               </td>
             </tr>
           ))}
