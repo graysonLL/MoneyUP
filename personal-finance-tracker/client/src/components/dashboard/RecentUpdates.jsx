@@ -9,8 +9,8 @@ const RecentUpdates = () => {
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [filters, setFilters] = useState({
-    type: 'all',
-    sort: 'latest'
+    type: "all",
+    sort: "latest",
   });
 
   useEffect(() => {
@@ -21,26 +21,26 @@ const RecentUpdates = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await fetch(
         `http://localhost:3001/api/transactions?page=${currentPage}&limit=${itemsPerPage}&type=${filters.type}&sort=${filters.sort}`
       );
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to fetch transactions');
+        throw new Error(errorData.error || "Failed to fetch transactions");
       }
-      
+
       const { data, hasMore } = await response.json();
-      
+
       if (!Array.isArray(data)) {
-        throw new Error('Invalid data format received');
+        throw new Error("Invalid data format received");
       }
-      
+
       setTransactions(data);
       setHasMore(hasMore);
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error("Fetch error:", err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -49,9 +49,9 @@ const RecentUpdates = () => {
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     setCurrentPage(1);
   };
@@ -79,7 +79,7 @@ const RecentUpdates = () => {
       <div className="updates-header">
         <h2>Recent Updates</h2>
         <div className="updates-filters">
-          <select 
+          <select
             name="type"
             value={filters.type}
             onChange={handleFilterChange}
@@ -88,7 +88,7 @@ const RecentUpdates = () => {
             <option value="income">Income</option>
             <option value="expense">Expenses</option>
           </select>
-          <select 
+          <select
             name="sort"
             value={filters.sort}
             onChange={handleFilterChange}
@@ -98,38 +98,41 @@ const RecentUpdates = () => {
           </select>
         </div>
       </div>
-
-      <table className="updates-table">
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((transaction, index) => (
-            <tr key={index}>
-              <td className={`type-${transaction.type}`}>{transaction.type}</td>
-              <td className={`amount-${transaction.type}`}>
-                {transaction.type === "expense" ? "-" : "+"}₱
-                {transaction.amount.toLocaleString()}.00
-              </td>
-              <td>{transaction.description}</td>
-              <td>{transaction.category}</td>
-              <td>
-                {new Date(transaction.date).toLocaleDateString('en-PH', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </td>
+      <div className="table-wrapper">
+        <table className="updates-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {transactions.map((transaction, index) => (
+              <tr key={index}>
+                <td className={`type-${transaction.type}`}>
+                  {transaction.type}
+                </td>
+                <td className={`amount-${transaction.type}`}>
+                  {transaction.type === "expense" ? "-" : "+"}₱
+                  {transaction.amount.toLocaleString()}.00
+                </td>
+                <td>{transaction.description}</td>
+                <td>{transaction.category}</td>
+                <td>
+                  {new Date(transaction.date).toLocaleDateString("en-PH", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className="recentupdates-pagination">
         <button
