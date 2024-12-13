@@ -116,9 +116,4 @@
   .metrics-grid {
     grid-template-columns: 1fr;
   }
-
-  .trend-container {
-    margin-top: 0;
-    margin-bottom: 2vh;
-  }
 }
