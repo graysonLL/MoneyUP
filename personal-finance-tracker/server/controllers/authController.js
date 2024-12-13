@@ -189,30 +189,67 @@ const authController = {
 
   updateProfile: async (req, res) => {
     try {
+      // Get the token from the Authorization header
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'No token provided' });
+      }
+
+      const token = authHeader.split(' ')[1];
+      
+      // Verify the token and get user data
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret-key');
+      const userId = decoded.userId; // Changed from id to userId to match token structure
+
+      // Get update data from request body
       const { firstName, lastName, email } = req.body;
-      const userId = req.user.id; // Get from auth middleware
 
-      console.log('Updating profile for user:', userId);
-      console.log('Update data:', { firstName, lastName, email });
+      // Check if email already exists for another user
+      const existingUser = await prisma.user.findUnique({
+        where: { email }
+      });
 
+      if (existingUser && existingUser.user_id !== userId) {
+        return res.status(400).json({ error: 'Email already in use' });
+      }
+
+      // Update user profile with correct field names
       const updatedUser = await prisma.user.update({
-        where: {
-          id: parseInt(userId)
+        where: { 
+          user_id: userId  // Changed from id to user_id
         },
         data: {
-          firstName,
-          lastName,
-          email
+          first_name: firstName,  // Changed from firstName to first_name
+          last_name: lastName,    // Changed from lastName to last_name
+          email: email
         }
       });
 
-      // Remove sensitive information
-      const { password, ...userWithoutPassword } = updatedUser;
-      
-      console.log('Profile updated successfully:', userWithoutPassword);
-      res.status(200).json({ user: userWithoutPassword });
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = updatedUser;
+
+      // Transform the response to match frontend expectations
+      const transformedUser = {
+        id: updatedUser.user_id,
+        firstName: updatedUser.first_name,
+        lastName: updatedUser.last_name,
+        email: updatedUser.email
+      };
+
+      // Generate new token with updated information
+      const newToken = jwt.sign(
+        { userId: updatedUser.user_id },  // Changed to match token structure
+        process.env.JWT_SECRET || 'fallback-secret-key',
+        { expiresIn: '24h' }
+      );
+
+      res.json({
+        user: transformedUser,  // Send transformed user data
+        token: newToken
+      });
+
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error('Profile update error:', error);
       res.status(500).json({ error: 'Failed to update profile' });
     }
   }
