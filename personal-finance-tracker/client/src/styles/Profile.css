@@ -117,6 +117,7 @@
 @media (max-width: 768px) {
   .profile-container {
     padding: 0;
+    height: 100%;
   }
 
   .profile-header {
@@ -129,7 +130,6 @@
 
   .profile-content-container {
     width: 80%;
-    min-height: 100vh;
     margin: 0;
   }
 
