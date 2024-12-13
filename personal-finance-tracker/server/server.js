@@ -16,6 +16,12 @@ app.use("/api/auth", authRoutes);
 const incomeRoutes = require("./routes/incomeRoutes");
 app.use("/api/income", incomeRoutes);
 
+const expenseRoutes = require("./routes/expenseRoutes");
+app.use("/api/expense", expenseRoutes);
+
+const categoryRoutes = require("./routes/expenseRoutes");
+app.use("/api/category", categoryRoutes);
+
 app.get("/", (req, res) => {
   res.send("Welcome to the Personal Finance Tracker API!");
 });
