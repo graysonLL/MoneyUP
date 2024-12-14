@@ -9,7 +9,8 @@ function LandingPageNavbar() {
       <div className="navbarLanding">
         <div className="navbarLanding-content">
           <div className="logoNavbarLanding">
-            Money<span className="highlight">Up</span>
+            <h1>Money</h1>
+            <span className="highlight">Up</span>
           </div>
           <div className="nav-buttons">
             <span onClick={() => navigate("/login")} className="login-text">
