@@ -148,66 +148,71 @@ const RecentUpdates = () => {
         </div>
       </div>
       <div className="table-wrapper">
-        <table className="updates-table">
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Amount</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((transaction, index) => (
-              <tr key={index}>
-                <td className={`type-${transaction.type}`}>
-                  {transaction.type}
-                </td>
-                <td className={`amount-${transaction.type}`}>
-                  {transaction.type === "expense" ? "-" : "+"}₱
-                  {transaction.amount.toLocaleString()}.00
-                </td>
-                <td>{transaction.description}</td>
-                <td>{transaction.category}</td>
-                <td>
-                  {new Date(transaction.date).toLocaleDateString("en-PH", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </td>
+        {transactions.length === 0 ? (
+          <div className="no-data-message">
+            No transactions available. Start adding transactions to see updates here.
+          </div>
+        ) : (
+          <table className="updates-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {transactions.map((transaction, index) => (
+                <tr key={index}>
+                  <td className={`type-${transaction.type}`}>
+                    {transaction.type}
+                  </td>
+                  <td className={`amount-${transaction.type}`}>
+                    {transaction.type === "expense" ? "-" : "+"}₱
+                    {transaction.amount.toLocaleString()}.00
+                  </td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.category}</td>
+                  <td>
+                    {new Date(transaction.date).toLocaleDateString("en-PH", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
-
-      <div className="recentupdates-pagination">
-        <button
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-          className={`recentupdates-pagination-btn ${
-            currentPage === 1 ? "disabled" : ""
-          }`}
-        >
-          Previous
-        </button>
-
-        <span className="page-info">Page {currentPage}</span>
-
-        <button
-          onClick={handleNextPage}
-          disabled={!hasMore}
-          className={`recentupdates-pagination-btn ${
-            !hasMore ? "disabled" : ""
-          }`}
-        >
-          Next
-        </button>
-      </div>
+      {transactions.length > 0 && (
+        <div className="recentupdates-pagination">
+          <button
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+            className={`recentupdates-pagination-btn ${
+              currentPage === 1 ? "disabled" : ""
+            }`}
+          >
+            Previous
+          </button>
+          <span className="page-info">Page {currentPage}</span>
+          <button
+            onClick={handleNextPage}
+            disabled={!hasMore}
+            className={`recentupdates-pagination-btn ${
+              !hasMore ? "disabled" : ""
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
-  );
+  );  
 };
 
 export default RecentUpdates;
