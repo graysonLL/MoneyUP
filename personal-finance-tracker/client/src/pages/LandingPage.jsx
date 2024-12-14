@@ -1,9 +1,71 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/LandingPage.css";
 import LandingPageNavbar from "../components/landing/LandingPageNavbar";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function LandingPage() {
   const navigate = useNavigate();
+
+  const chartData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "Savings",
+        data: [1000, 1500, 2000, 2400, 2800, 3500],
+        borderColor: "#4CAF50",
+        backgroundColor: "rgba(76, 175, 80, 0.1)",
+        fill: true,
+        tension: 0.4,
+      },
+      {
+        label: "Expenses",
+        data: [800, 1200, 1100, 1400, 1300, 1500],
+        borderColor: "#f44336",
+        backgroundColor: "rgba(244, 67, 54, 0.1)",
+        fill: true,
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Financial Overview",
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
 
   return (
     <div className="landing-page">
@@ -28,7 +90,9 @@ function LandingPage() {
             </button>
           </div>
           <div className="hero-image">
-            <img alt="Financial Management" />
+            <div className="hero-chart">
+              <Line data={chartData} options={chartOptions} />
+            </div>
           </div>
         </div>
       </div>

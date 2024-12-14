@@ -10,6 +10,7 @@
     "axios": "^1.7.9",
     "chart.js": "^4.4.6",
     "http-proxy-middleware": "^3.0.3",
+    "joi": "^17.13.3",
     "jwt-decode": "^4.0.0",
     "jwt-decoder": "^0.0.0",
     "react": "^18.3.1",
