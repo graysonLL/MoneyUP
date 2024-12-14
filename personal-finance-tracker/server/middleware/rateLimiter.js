@@ -21,6 +21,5 @@ const authLimiter = rateLimit({
 // Export Limiters
 module.exports = {
   generalLimiter,
-  authLimiter,
-  apiKeyLimiter,
+  authLimiter
 };
