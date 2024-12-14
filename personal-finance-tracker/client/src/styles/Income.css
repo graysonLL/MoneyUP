@@ -103,7 +103,6 @@
   }
 
   .income-header {
-    flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
   }
