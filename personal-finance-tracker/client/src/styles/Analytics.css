@@ -5,6 +5,7 @@
   transition: margin-left 0.3s ease;
   overflow-x: hidden;
   overflow-y: auto;
+  height: 100%;
 }
 
 .analytics-container.sidebar-closed {
@@ -22,9 +23,13 @@
   background: #1e2330;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.375rem;
-  color: white;
+  color: #94a3b8;
   cursor: pointer;
   font-size: 0.875rem;
+}
+
+.period-select:hover {
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .analytics-header {
@@ -114,10 +119,5 @@
 
   .metrics-grid {
     grid-template-columns: 1fr;
-  }
-
-  .trend-container {
-    margin-top: 0;
-    margin-bottom: 2vh;
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import {
   HomeIcon,
@@ -9,21 +9,51 @@ import {
   Bars3Icon,
 } from "@heroicons/react/24/outline";
 import "../../styles/Hamburger.css";
-import { useAuth } from '../../contexts/AuthContext';
-
+import { useAuth } from "../../contexts/AuthContext";
 
 function Hamburger({ username }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
-  const {logout} = useAuth();
+  // Add refs for both menus
+  const dropdownRef = useRef(null);
+  const hamburgerMenuRef = useRef(null);
+  const hamburgerButtonRef = useRef(null);
+
+  // Click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Handle dropdown click outside
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+
+      // Handle hamburger menu click outside
+      if (
+        isMenuOpen &&
+        hamburgerMenuRef.current &&
+        !hamburgerMenuRef.current.contains(event.target) &&
+        !hamburgerButtonRef.current.contains(event.target)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
   const handleLogout = () => {
     console.log("HandleLogout called");
     logout();
     setIsDropdownOpen(false);
-    navigate('/login');
+    navigate("/login");
     console.log("After navigation");
   };
 
@@ -40,11 +70,12 @@ function Hamburger({ username }) {
       <div className="hamburger-header">
         <button
           className="hamburger-button"
-          onClick={() => setIsMenuOpen(true)}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          ref={hamburgerButtonRef}
         >
           <Bars3Icon className="hamburger-icon" />
         </button>
-        <div className="user-dropdown">
+        <div className="user-dropdown" ref={dropdownRef}>
           <button
             className="username-button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -53,8 +84,22 @@ function Hamburger({ username }) {
           </button>
           {isDropdownOpen && (
             <div className="dropdown-menu">
-              <button onClick={() => navigate("/profile")}>View Profile</button>
-              <button onClick={handleLogout}>Logout</button>
+              <button
+                onClick={() => {
+                  navigate("/profile");
+                  setIsDropdownOpen(false);
+                }}
+              >
+                View Profile
+              </button>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsDropdownOpen(false);
+                }}
+              >
+                Logout
+              </button>
             </div>
           )}
         </div>
@@ -69,7 +114,10 @@ function Hamburger({ username }) {
       )}
 
       {/* Slide Menu */}
-      <div className={`hamburger-menu ${isMenuOpen ? "open" : ""}`}>
+      <div
+        className={`hamburger-menu ${isMenuOpen ? "open" : ""}`}
+        ref={hamburgerMenuRef}
+      >
         <div className="sidebar-logo-hamburger">
           Money<span className="logo-highlight">Up</span>
         </div>
