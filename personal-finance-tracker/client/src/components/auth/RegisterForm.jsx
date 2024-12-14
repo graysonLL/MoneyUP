@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import "../../styles/registerform.css";
 import { authService } from "../../services/authService";
 import { useNavigate } from 'react-router-dom';
+import { registerSchema } from '../../validation/validationSchemas';
 
 const RegisterForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const RegisterForm = ({ onSubmit }) => {
     password: "",
     confirmPassword: "",
   });
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -24,10 +26,16 @@ const RegisterForm = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+    const { error } = registerSchema.validate(formData, { abortEarly: false });
+    if (error) {
+      const errorMessages = {};
+      error.details.forEach(detail => {
+        errorMessages[detail.path[0]] = detail.message;
+      });
+      setErrors(errorMessages);
       return;
     }
+    setErrors({});
     try {
       const response = await authService.register(formData);
       console.log("Registration successful:", response);
@@ -49,6 +57,7 @@ const RegisterForm = ({ onSubmit }) => {
         onChange={handleChange}
         required
       />
+      {errors.firstName && <div className="error">{errors.firstName}</div>}
       <input
         type="text"
         name="lastName"
@@ -58,6 +67,7 @@ const RegisterForm = ({ onSubmit }) => {
         onChange={handleChange}
         required
       />
+      {errors.lastName && <div className="error">{errors.lastName}</div>}
       <input
         type="email"
         name="email"
@@ -67,6 +77,7 @@ const RegisterForm = ({ onSubmit }) => {
         onChange={handleChange}
         required
       />
+      {errors.email && <div className="error">{errors.email}</div>}
       <input
         type="password"
         name="password"
@@ -76,6 +87,7 @@ const RegisterForm = ({ onSubmit }) => {
         onChange={handleChange}
         required
       />
+      {errors.password && <div className="error">{errors.password}</div>}
       <input
         type="password"
         name="confirmPassword"
@@ -85,6 +97,7 @@ const RegisterForm = ({ onSubmit }) => {
         onChange={handleChange}
         required
       />
+      {errors.confirmPassword && <div className="error">{errors.confirmPassword}</div>}
       <button type="submit" className="registerButton">
         Sign Up
       </button>
