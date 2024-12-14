@@ -10,6 +10,7 @@ const LoginForm = () => {
     email: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
   const { login, isAuthenticated } = useAuth();
@@ -34,6 +35,7 @@ const LoginForm = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error("Login failed:", error);
+      setErrorMessage("Invalid email or password.");
     }
   };
 
@@ -57,6 +59,7 @@ const LoginForm = () => {
         onChange={handleChange}
         required
       />
+      {errorMessage && <div className="error">{errorMessage}</div>}
       <a href="#" className="forgotPassword">
         Forgot password?
       </a>
