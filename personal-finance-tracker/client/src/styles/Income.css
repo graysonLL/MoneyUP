@@ -347,3 +347,53 @@
   background-color: #2d3748;
   color: #fff;
 }
+
+.no-income-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  text-align: center;
+  color: #94a3b8;
+  background-color: rgba(45, 55, 72, 0.5);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  margin: 1rem 0;
+}
+
+.no-income-message p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+}
+
+.edit-btn {
+  color: #60a5fa;
+}
+
+.delete-btn {
+  color: #ef4444;
+}
+
+.edit-btn:hover {
+  background: rgba(96, 165, 250, 0.1);
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}

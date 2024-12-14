@@ -3,15 +3,20 @@ const prisma = new PrismaClient();
 
 const getTransactions = async (req, res) => {
   try {
+    const userId = parseInt(req.params.userId);
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
     const type = req.query.type || 'all';
     const sort = req.query.sort || 'latest';
     const skip = (page - 1) * limit;
 
-    // Get both incomes and expenses
+    // Get both incomes and expenses for specific user
     const [incomes, expenses] = await Promise.all([
       prisma.income.findMany({
+        where: {
+          user_id: userId,
+          ...(type === 'expense' ? { income_id: -1 } : {})
+        },
         select: {
           income_id: true,
           amount: true,
@@ -24,12 +29,15 @@ const getTransactions = async (req, res) => {
             }
           }
         },
-        ...(type === 'income' ? {} : type === 'expense' ? { where: { income_id: -1 } } : {}),
         orderBy: {
           created_at: sort === 'latest' ? 'desc' : 'asc'
         }
       }),
       prisma.expense.findMany({
+        where: {
+          user_id: userId,
+          ...(type === 'income' ? { expense_id: -1 } : {})
+        },
         select: {
           expense_id: true,
           amount: true,
@@ -42,7 +50,6 @@ const getTransactions = async (req, res) => {
             }
           }
         },
-        ...(type === 'expense' ? {} : type === 'income' ? { where: { expense_id: -1 } } : {}),
         orderBy: {
           created_at: sort === 'latest' ? 'desc' : 'asc'
         }
@@ -74,9 +81,9 @@ const getTransactions = async (req, res) => {
     // Sort combined results
     allTransactions.sort((a, b) => {
       if (sort === 'latest') {
-        return b.created_at - a.created_at;
+        return new Date(b.created_at) - new Date(a.created_at);
       }
-      return a.created_at - b.created_at;
+      return new Date(a.created_at) - new Date(b.created_at);
     });
 
     // Paginate results
@@ -85,7 +92,8 @@ const getTransactions = async (req, res) => {
 
     res.json({
       data: paginatedTransactions,
-      hasMore: skip + limit < total
+      hasMore: skip + limit < total,
+      total
     });
   } catch (error) {
     console.error('Error in getTransactions:', error);

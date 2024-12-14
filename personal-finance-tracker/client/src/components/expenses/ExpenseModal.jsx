@@ -3,11 +3,11 @@ import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import { jwtDecode } from 'jwt-decode';
 
-const ExpenseModal = ({ isOpen, onClose, onSubmit }) => {
+const ExpenseModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [formData, setFormData] = useState({
     amount: '',
-    category_id: '',
     description: '',
+    category_id: '',
     date: new Date().toISOString().split('T')[0]
   });
   const [categories, setCategories] = useState([]);
@@ -53,6 +53,24 @@ const ExpenseModal = ({ isOpen, onClose, onSubmit }) => {
     }
   }, [isOpen, token]);
 
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        amount: initialData.amount,
+        description: initialData.description,
+        category_id: initialData.category.category_id,
+        date: new Date(initialData.date).toISOString().split('T')[0]
+      });
+    } else {
+      setFormData({
+        amount: '',
+        description: '',
+        category_id: '',
+        date: new Date().toISOString().split('T')[0]
+      });
+    }
+  }, [initialData]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -61,42 +79,16 @@ const ExpenseModal = ({ isOpen, onClose, onSubmit }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const userId = getUserIdFromToken();
-      if (!userId) {
-        setError('User authentication failed');
-        return;
-      }
-
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        'http://localhost:3001/api/expense',
-        {
-          ...formData,
-          user_id: userId,
-          date: new Date(formData.date).toISOString()
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
-      onSubmit(response.data);
-      setFormData({
-        amount: '',
-        category_id: '',
-        description: '',
-        date: new Date().toISOString().split('T')[0]
-      });
-      onClose();
-    } catch (err) {
-      setError('Failed to add expense');
-      console.error('Error adding expense:', err);
-    }
+    // Ensure amount is a number and properly formatted
+    const formattedData = {
+      ...formData,
+      amount: Number(formData.amount),
+      category_id: Number(formData.category_id)
+    };
+    console.log('Submitting data:', formattedData);
+    onSubmit(formattedData);
   };
 
   if (!isOpen) return null;

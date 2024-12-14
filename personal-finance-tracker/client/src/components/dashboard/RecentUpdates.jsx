@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/RecentUpdates.css";
+import { useAuth } from "../../contexts/AuthContext";
+import axios from 'axios';
 
 const RecentUpdates = () => {
+  const { user } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(7);
@@ -14,34 +17,75 @@ const RecentUpdates = () => {
   });
 
   useEffect(() => {
-    fetchTransactions();
-  }, [currentPage, filters]);
+    if (user?.id) {
+      fetchTransactions();
+    }
+  }, [currentPage, filters, user?.id]);
 
   const fetchTransactions = async () => {
     try {
       setLoading(true);
       setError(null);
       
-      const response = await fetch(
-        `http://localhost:3001/api/transactions?page=${currentPage}&limit=${itemsPerPage}&type=${filters.type}&sort=${filters.sort}`
-      );
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to fetch transactions');
+      const token = localStorage.getItem('token');
+      console.log('Token:', token ? 'Present' : 'Missing');
+      console.log('User ID:', user.id);
+      console.log('Request URL:', `http://localhost:3001/api/transactions/user/${user.id}`);
+
+      if (!token) {
+        throw new Error('No authentication token found');
       }
-      
-      const { data, hasMore } = await response.json();
+
+      const config = {
+        params: {
+          page: currentPage,
+          limit: itemsPerPage,
+          type: filters.type,
+          sort: filters.sort
+        },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      };
+
+      console.log('Request config:', config);
+
+      const response = await axios.get(
+        `http://localhost:3001/api/transactions/user/${user.id}`,
+        config
+      );
+
+      console.log('Response:', response.data);
+
+      const { data, hasMore } = response.data;
       
       if (!Array.isArray(data)) {
+        console.error('Invalid data format:', data);
         throw new Error('Invalid data format received');
       }
       
       setTransactions(data);
       setHasMore(hasMore);
     } catch (err) {
-      console.error('Fetch error:', err);
-      setError(err.message);
+      console.error('Detailed fetch error:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        endpoint: err.config?.url,
+        stack: err.stack
+      });
+
+      if (err.response) {
+        // Server responded with an error
+        setError(`Server error: ${err.response.data.error || err.response.statusText}`);
+      } else if (err.request) {
+        // Request was made but no response received
+        setError('No response received from server. Please check your connection.');
+      } else {
+        // Error in request setup
+        setError(`Request error: ${err.message}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -76,6 +120,11 @@ const RecentUpdates = () => {
 
   return (
     <div className="recent-updates">
+      {error && (
+        <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>
+          {error}
+        </div>
+      )}
       <div className="updates-header">
         <h2>Recent Updates</h2>
         <div className="updates-filters">
