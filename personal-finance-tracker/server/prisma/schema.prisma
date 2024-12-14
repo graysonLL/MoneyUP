@@ -1,74 +1,84 @@
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-
 generator client {
   provider = "prisma-client-js"
 }
 
-
 model User {
-  user_id   Int       @id @default(autoincrement())
-  first_name      String
-  last_name       String  
-  email     String    @unique
-  password  String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  expenses  Expense[]
-  incomes   Income[]
+  user_id    Int        @id @default(autoincrement())
+  first_name String
+  last_name  String
+  email      String     @unique
+  password   String
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  expenses   Expense[]
+  incomes    Income[]
   categories Category[]
+  Goal       Goal[]
 }
-
 
 model Income {
-  income_id  Int       @id @default(autoincrement())
-  user_id    Int
+  income_id   Int      @id @default(autoincrement())
+  user_id     Int
   category_id Int
-  amount     Decimal   @db.Decimal(10, 2)
+  amount      Decimal  @db.Decimal(10, 2)
   description String?
-  date       DateTime
-  created_at DateTime @default(now())
-  
-  user       User      @relation(fields: [user_id], references: [user_id])
-  category   Category  @relation(fields: [category_id], references: [category_id])
-   @@index([date(sort: Desc)])
-}
+  date        DateTime
+  created_at  DateTime @default(now())
 
+  user     User     @relation(fields: [user_id], references: [user_id])
+  category Category @relation(fields: [category_id], references: [category_id])
 
-model Expense {
-  expense_id Int       @id @default(autoincrement())
-  user_id    Int
-  category_id Int
-  amount     Decimal   @db.Decimal(10, 2)
-  description String?
-  date       DateTime
-  created_at DateTime @default(now())
-  
-  user       User      @relation(fields: [user_id], references: [user_id])
-  category   Category  @relation(fields: [category_id], references: [category_id])
   @@index([date(sort: Desc)])
 }
 
+model Expense {
+  expense_id  Int      @id @default(autoincrement())
+  user_id     Int
+  category_id Int
+  amount      Decimal  @db.Decimal(10, 2)
+  description String?
+  date        DateTime
+  created_at  DateTime @default(now())
+
+  user     User     @relation(fields: [user_id], references: [user_id])
+  category Category @relation(fields: [category_id], references: [category_id])
+
+  @@index([date(sort: Desc)])
+}
 
 model Category {
-  category_id Int      @id @default(autoincrement())
+  category_id Int          @id @default(autoincrement())
   user_id     Int
   name        String
   type        CategoryType
-  created_at  DateTime @default(now())
+  created_at  DateTime     @default(now())
 
-  user        User     @relation(fields: [user_id], references: [user_id])
-  expenses    Expense[]
-  incomes     Income[]
+  user     User      @relation(fields: [user_id], references: [user_id])
+  expenses Expense[]
+  incomes  Income[]
 
   @@unique([user_id, name, type]) // Unique constraint on user_id, name, and type
 }
 
+model Goal {
+  goal_id        Int       @id @default(autoincrement())
+  user_id        Int
+  name           String
+  description    String?
+  target_amount  Decimal   @db.Decimal(10, 2) // The target amount for the goal
+  current_amount Decimal   @db.Decimal(10, 2) // The current amount achieved for the goal
+  deadline       DateTime?
+  created_at     DateTime  @default(now())
 
+  user User @relation(fields: [user_id], references: [user_id])
+
+  @@index([deadline])
+}
 
 enum CategoryType {
   income
