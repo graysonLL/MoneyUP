@@ -11,20 +11,20 @@ const Login = () => {
   return (
     <LeftRightPanel>
       {{
+        logo: <h1 className="logo">Money<span>UP</span></h1>,
         leftPanel: (
           <>
-            <h1 className="logo">MoneyUP</h1>
-            <h2 className="welcomeText">Welcome Back!</h2>
+            <h2 className="welcomeText">Sign in to your account</h2>
             <LoginForm onSubmit={handleLogin} />
             <p className="signUpText">
-              Don’t have an account?{" "}
+              Don't have an account?{" "}
               <a href="/signup" className="signUpLink">
                 Sign up
               </a>
             </p>
           </>
         ),
-        rightPanel: <div className="rightPanelContent"></div>,
+        rightPanel: null
       }}
     </LeftRightPanel>
   );

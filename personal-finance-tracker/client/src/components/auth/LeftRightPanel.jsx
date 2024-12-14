@@ -3,11 +3,9 @@ import "../../styles/LeftRightPanel.css";
 const LeftRightPanel = ({ children }) => {
   return (
     <div className="container">
-      {/* Left Section */}
+      {children.logo}
       <div className="leftPanel">{children.leftPanel}</div>
-
-      {/* Right Section */}
-      <div className="rightPanel">{children.rightPanel}</div>
+      {children.rightPanel && <div className="rightPanel">{children.rightPanel}</div>}
     </div>
   );
 };

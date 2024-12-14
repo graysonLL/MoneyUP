@@ -10,9 +10,9 @@ const Signup = () => {
   return (
     <LeftRightPanel>
       {{
+        logo: <h1 className="logo">Money<span>UP</span></h1>,
         leftPanel: (
           <>
-            <h1 className="logo">MoneyUP</h1>
             <h2 className="welcomeText">Create an account</h2>
             <p className="accountDescription">
               Easily manage your money and reach your goals with MoneyUP.
@@ -26,7 +26,7 @@ const Signup = () => {
             </p>
           </>
         ),
-        rightPanel: <div className="rightPanelContent"></div>,
+        rightPanel: null
       }}
     </LeftRightPanel>
   );

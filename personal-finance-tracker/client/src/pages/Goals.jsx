@@ -6,7 +6,7 @@ import '../styles/Goals.css';
 const Goals = ({ isSidebarOpen }) => {
   const [goals, setGoals] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentBalance, setCurrentBalance] = useState(5000); // This should come from your API
+  const [currentBalance, setCurrentBalance] = useState(100); // Setting 10,000 for testing
   const { token } = useAuth();
 
   const GoalModal = ({ isOpen, onClose, onSubmit }) => {
@@ -78,47 +78,76 @@ const Goals = ({ isSidebarOpen }) => {
     );
   };
 
+  const handleGoalSubmit = (formData) => {
+    const newGoal = {
+      ...formData,
+      id: Date.now(),
+      achieved: false
+    };
+    setGoals([...goals, newGoal]);
+  };
+
   return (
     <div className={`goals-content-wrapper ${!isSidebarOpen ? "sidebar-closed" : ""}`}>
       <div className="goals-container">
         <div className="goals-header">
           <h1>Financial Goals</h1>
-          <button className="add-goal-btn" onClick={() => setIsModalOpen(true)}>
-            + Add Goal
-          </button>
+          <div className="goals-header-right">
+            <div className="current-balance">
+              <span className="balance-label">Current Balance:</span>
+              <span className="balance-amount">₱{currentBalance.toLocaleString()}</span>
+            </div>
+            <button className="add-goal-btn" onClick={() => setIsModalOpen(true)}>
+              + Add Goal
+            </button>
+          </div>
         </div>
 
         <div className="goals-grid">
           {goals.map((goal) => (
-            <div key={goal.id} className="goal-card">
+            <div key={goal.id} className={`goal-card ${goal.achieved ? 'achieved' : ''}`}>
               <div className="goal-header">
                 <h3>{goal.name}</h3>
                 <span className="goal-date">Target: {new Date(goal.targetDate).toLocaleDateString()}</span>
               </div>
-              <div className="goal-progress">
-                <div 
-                  className="progress-bar"
-                  style={{width: `${(goal.currentAmount / goal.targetAmount) * 100}%`}}
-                />
+              <div className="goal-progress-container">
+                <div className="goal-progress">
+                  <div 
+                    className="progress-bar"
+                    style={{width: `${(currentBalance / goal.targetAmount) * 100}%`}}
+                  />
+                </div>
                 <span className="progress-text">
-                  {((goal.currentAmount / goal.targetAmount) * 100).toFixed(1)}%
+                  {((currentBalance / goal.targetAmount) * 100).toFixed(1)}%
                 </span>
               </div>
               <div className="goal-amounts">
-                <span>Current: ₱{goal.currentAmount.toLocaleString()}</span>
-                <span>Target: ₱{goal.targetAmount.toLocaleString()}</span>
-              </div>
-              {currentBalance > 0 && goal.currentAmount < goal.targetAmount && (
-                <div className="add-funds-form">
-                  <input 
-                    type="number"
-                    placeholder="Amount to add"
-                    min="0"
-                    max={Math.min(currentBalance, goal.targetAmount - goal.currentAmount)}
-                  />
-                  <button className="add-funds-btn">Add Funds</button>
+                <div className="amount-item">
+                  <span className="amount-label">Current Balance</span>
+                  <span className="amount-value current">₱{currentBalance.toLocaleString()}</span>
                 </div>
-              )}
+                <div className="amount-item">
+                  <span className="amount-label">Target</span>
+                  <span className="amount-value target">₱{parseFloat(goal.targetAmount).toLocaleString()}</span>
+                </div>
+              </div>
+              {currentBalance >= goal.targetAmount && !goal.achieved ? (
+                <button 
+                  className="mark-achieved-btn"
+                  onClick={() => {
+                    const updatedGoals = goals.map(g => 
+                      g.id === goal.id ? { ...g, achieved: true } : g
+                    );
+                    setGoals(updatedGoals);
+                  }}
+                >
+                  Mark Goal as Achieved 🎉
+                </button>
+              ) : goal.achieved ? (
+                <div className="achievement-badge">
+                  <span>🏆 Goal Achieved!</span>
+                </div>
+              ) : null}
             </div>
           ))}
         </div>
@@ -126,9 +155,7 @@ const Goals = ({ isSidebarOpen }) => {
         <GoalModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSubmit={(goal) => {
-            setGoals([...goals, { ...goal, id: Date.now(), currentAmount: 0 }]);
-          }}
+          onSubmit={handleGoalSubmit}
         />
       </div>
     </div>

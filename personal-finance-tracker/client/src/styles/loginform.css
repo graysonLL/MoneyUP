@@ -1,15 +1,14 @@
 .logo {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 20px;
-  position: absolute;
-  top: 40px;
-  left: 40px;
+  color: #ffffff;
 }
 
 .welcomeText {
-  font-size: 64px;
-  margin-bottom: 30px;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: #ffffff;
+  text-align: center;
 }
 
 .form {
@@ -17,43 +16,85 @@
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .input {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+  padding: 0.875rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  background-color: #2d3748;
+  color: #ffffff;
+  font-size: 0.875rem;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #9333ea;
+}
+
+.input::placeholder {
+  color: #94a3b8;
 }
 
 .forgotPassword {
   align-self: flex-end;
-  margin-bottom: 20px;
   text-decoration: none;
-  font-size: 14px;
-  color: #007bff;
+  font-size: 0.875rem;
+  color: #9333ea;
+  margin-top: -0.25rem;
+  margin-bottom: 0.25rem;
 }
 
-.loginButton {
-  width: 107%;
-  padding: 12px;
-  background-color: #000;
-  color: #fff;
+.forgotPassword:hover {
+  text-decoration: underline;
+}
+
+.form button {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: #9333ea;
+  color: #ffffff;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form button:hover {
+  background-color: #7e22ce;
 }
 
 .signUpText {
-  margin-top: 20px;
-  font-size: 14px;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: #94a3b8;
+  text-align: center;
 }
 
 .signUpLink {
-  color: #007bff;
+  color: #9333ea;
   text-decoration: none;
+  font-weight: 500;
+}
+
+.signUpLink:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .welcomeText {
+    font-size: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .form {
+    padding: 0 1rem;
+  }
 }
