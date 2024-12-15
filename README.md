@@ -67,8 +67,11 @@ DATABASE_URL="mysql://root:@localhost:3306/finance_tracker"
 JWT_SECRET=your-secret-key-here
 ```
 4. **Migrate the database:**
+   
 -Ensure your MySQL server is running.
+
 -Run the Prisma migration to create the necessary tables:
+
 ```
 cd server
 npx prisma migrate dev --name init
@@ -76,6 +79,7 @@ npx prisma migrate dev --name init
 ```
 
 5. **Start the application:**
+   
 Frontend 
 ```
 cd client
