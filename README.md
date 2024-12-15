@@ -43,6 +43,7 @@ The application uses a MySQL database with the following Prisma schema:
 1. **Clone the repository:**
    ```git clone https://github.com/graysonLL/MoneyUP.git```
 2. **Install dependencies**
+   
 Frontend (React)
 ```
 cd client
