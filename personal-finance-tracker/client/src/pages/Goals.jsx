@@ -58,10 +58,24 @@ const Goals = ({ isSidebarOpen }) => {
 
   const handleGoalSubmit = async (goalData) => {
     try {
+      // Validate the data before sending
+      if (!goalData.name || !goalData.targetAmount) {
+        alert("Please fill in all required fields");
+        return;
+      }
+
+      // Format the data to match our schema
+      const formattedData = {
+        name: goalData.name,
+        target_amount: parseFloat(goalData.targetAmount).toString(), // Convert to string for Decimal
+        deadline: goalData.targetDate ? new Date(goalData.targetDate).toISOString() : null,
+        user_id: user.id
+      };
+
       if (selectedGoal) {
         const response = await axios.put(
           `http://localhost:3001/api/goals/${selectedGoal.goal_id}`,
-          { ...goalData, user_id: user.id }
+          formattedData
         );
         setGoals((prevGoals) =>
           prevGoals.map((goal) =>
@@ -71,7 +85,7 @@ const Goals = ({ isSidebarOpen }) => {
       } else {
         const response = await axios.post(
           `http://localhost:3001/api/goals`,
-          { ...goalData, user_id: user.id }
+          formattedData
         );
         setGoals((prevGoals) => [response.data, ...prevGoals]);
       }
@@ -79,7 +93,7 @@ const Goals = ({ isSidebarOpen }) => {
       setSelectedGoal(null);
     } catch (error) {
       console.error("Failed to save goal:", error);
-      alert("Failed to save goal");
+      alert("Failed to save goal: " + error.response?.data?.details || error.message);
     }
   };
 
@@ -100,76 +114,29 @@ const Goals = ({ isSidebarOpen }) => {
     }
   };
 
-  const handleAddFunds = async (goalId, amount) => {
-    const numAmount = parseFloat(amount);
-    if (isNaN(numAmount) || numAmount <= 0) {
-      alert("Please enter a valid amount");
-      return;
-    }
-
-    if (numAmount > summary.currentBalance) {
-      alert("Insufficient balance");
-      return;
-    }
-
+  const handleMarkAchieved = async (goal) => {
     try {
-      const goal = goals.find((g) => g.goal_id === goalId);
-      const updatedGoal = {
-        ...goal,
-        currentAmount: (goal.currentAmount || 0) + numAmount,
-      };
-
-      // Create an expense for the funds added to goal
-      await axios.post(`http://localhost:3001/api/expense`, {
-        user_id: user.id,
-        amount: numAmount,
-        category: "Goal Funding",
-        description: `Funds added to goal: ${goal.name}`,
-      });
-
-      // Update the goal in the backend
+      // Mark goal as achieved - the controller will handle expense creation
       const response = await axios.put(
-        `http://localhost:3001/api/goals/${goalId}`,
-        updatedGoal
+        `http://localhost:3001/api/goals/${goal.goal_id}`,
+        { 
+          ...goal, 
+          achieved: true,
+          user_id: user.id  // Make sure to send user_id for the expense creation
+        }
       );
 
       // Update local states
       setGoals((prevGoals) =>
-        prevGoals.map((g) => (g.goal_id === goalId ? response.data : g))
+        prevGoals.map((g) => (g.goal_id === goal.goal_id ? response.data : g))
       );
       setSummary((prev) => ({
         ...prev,
-        currentBalance: prev.currentBalance - numAmount,
+        currentBalance: prev.currentBalance - parseFloat(goal.target_amount),
       }));
-
-      // Clear the input
-      setFundInputs((prev) => ({ ...prev, [goalId]: "" }));
-    } catch (error) {
-      console.error("Failed to add funds:", error);
-      alert("Failed to add funds");
-    }
-  };
-
-  // Handle input change for fund amounts
-  const handleFundInputChange = (goalId, value) => {
-    setFundInputs(prev => ({
-      ...prev,
-      [goalId]: value
-    }));
-  };
-
-  const handleMarkAchieved = async (goal) => {
-    const updatedGoal = { ...goal, achieved: true };
-    try {
-      const response = await axios.put(
-        `http://localhost:3001/api/goals/${goal.goal_id}`,
-        updatedGoal
-      );
-      setGoals((prevGoals) =>
-        prevGoals.map((g) => (g.goal_id === goal.goal_id ? response.data : g))
-      );
     } catch (error) {
       console.error("Failed to mark goal as achieved:", error);
+      alert("Failed to mark goal as achieved");
     }
   };
 
@@ -204,6 +171,7 @@ const Goals = ({ isSidebarOpen }) => {
                   <button 
                     className="edit-btn"
                     onClick={() => handleEditGoal(goal)}
+                    disabled={goal.achieved}
                   >
                     ✏️
                   </button>
@@ -216,53 +184,36 @@ const Goals = ({ isSidebarOpen }) => {
                 </div>
               </div>
               <span className="goal-date">
-                Target: {new Date(goal.targetDate).toLocaleDateString()}
+                Target: {new Date(goal.deadline).toLocaleDateString()}
               </span>
               <div className="goal-progress-container">
                 <div className="goal-progress">
                   <div
                     className="progress-bar"
-                    style={{ width: `${((goal.currentAmount || 0) / (goal.targetAmount || 1)) * 100}%` }}
+                    style={{ 
+                      width: `${goal.achieved ? 100 : Math.min((summary.currentBalance / parseFloat(goal.target_amount)) * 100, 100)}%` 
+                    }}
                   />
                 </div>
                 <span className="progress-text">
-                  {((goal.currentAmount || 0) / (goal.targetAmount || 1) * 100).toFixed(1)}%
+                  {goal.achieved ? 100 : Math.min((summary.currentBalance / parseFloat(goal.target_amount)) * 100, 100).toFixed(1)}%
                 </span>
               </div>
               <div className="goal-amounts">
                 <div className="amount-item">
-                  <span className="amount-label">Current</span>
+                  <span className="amount-label">Available</span>
                   <span className="amount-value current">
-                    ₱{(goal.currentAmount || 0).toLocaleString()}
+                    ₱{summary.currentBalance.toLocaleString()}
                   </span>
                 </div>
                 <div className="amount-item">
                   <span className="amount-label">Target</span>
                   <span className="amount-value target">
-                    ₱{(goal.targetAmount || 0).toLocaleString()}
+                    ₱{parseFloat(goal.target_amount).toLocaleString()}
                   </span>
                 </div>
               </div>
-              {summary.currentBalance > 0 && goal.currentAmount < goal.targetAmount && !goal.achieved && (
-                <div className="add-funds-form">
-                  <input
-                    type="number"
-                    placeholder="Amount to add"
-                    min="0"
-                    max={Math.min(summary.currentBalance, goal.targetAmount - (goal.currentAmount || 0))}
-                    value={fundInputs[goal.goal_id] || ''}
-                    onChange={(e) => handleFundInputChange(goal.goal_id, e.target.value)}
-                  />
-                  <button
-                    className="add-funds-btn"
-                    onClick={() => handleAddFunds(goal.goal_id, fundInputs[goal.goal_id])}
-                    disabled={!fundInputs[goal.goal_id] || parseFloat(fundInputs[goal.goal_id]) <= 0}
-                  >
-                    Add Funds
-                  </button>
-                </div>
-              )}
-              {goal.currentAmount >= goal.targetAmount && !goal.achieved ? (
+              {summary.currentBalance >= parseFloat(goal.target_amount) && !goal.achieved ? (
                 <button
                   className="mark-achieved-btn"
                   onClick={() => handleMarkAchieved(goal)}
@@ -272,6 +223,11 @@ const Goals = ({ isSidebarOpen }) => {
               ) : goal.achieved ? (
                 <div className="achievement-badge">
                   <span>🏆 Goal Achieved!</span>
+                  {goal.achieved_at && (
+                    <span className="achieved-date">
+                      on {new Date(goal.achieved_at).toLocaleDateString()}
+                    </span>
+                  )}
                 </div>
               ) : null}
             </div>

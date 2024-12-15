@@ -1,26 +1,49 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient, Prisma } = require('@prisma/client');
 const prisma = new PrismaClient();
-
 
 module.exports = {
     createGoal: async (req, res) => {
         try {
-            const { name, targetAmount, targetDate, currentAmount, user_id } = req.body;
+            const { name, target_amount, deadline, user_id } = req.body;
+
+            // Validate required fields
+            if (!name || !target_amount || !user_id) {
+                return res.status(400).json({ 
+                    error: 'Missing required fields',
+                    details: 'name, target_amount, and user_id are required'
+                });
+            }
+
+            // Validate target_amount is a valid number
+            const parsedAmount = parseFloat(target_amount);
+            if (isNaN(parsedAmount) || parsedAmount <= 0) {
+                return res.status(400).json({ 
+                    error: 'Invalid target amount',
+                    details: 'Target amount must be a positive number'
+                });
+            }
 
             const newGoal = await prisma.goal.create({
                 data: {
                     name,
-                    target_amount: parseFloat(targetAmount),
-                    current_amount: parseFloat(currentAmount) || 0,
-                    deadline: targetDate ? new Date(targetDate) : null,
-                    user_id: parseInt(user_id)
+                    target_amount: new Prisma.Decimal(parsedAmount.toString()),
+                    deadline: deadline ? new Date(deadline) : null,
+                    achieved: false,
+                    user: {
+                        connect: {
+                            user_id: parseInt(user_id)
+                        }
+                    }
                 },
             });
 
             res.status(201).json(newGoal);
         } catch (error) {
             console.error('Error creating goal:', error);
-            res.status(500).json({ error: 'Failed to create goal' });
+            res.status(500).json({ 
+                error: 'Failed to create goal',
+                details: error.message
+            });
         }
     },
 
@@ -62,16 +85,58 @@ module.exports = {
     updateGoal: async (req, res) => {
         try {
             const goal_id = parseInt(req.params.goalId);
-            const { name, targetAmount, currentAmount, targetDate } = req.body;
+            const { name, target_amount, deadline, achieved } = req.body;
+
+            // If marking as achieved, create expense entry
+            if (achieved) {
+                // Find the "Other" category for this user
+                const otherCategory = await prisma.category.findFirst({
+                    where: {
+                        name: 'Other',
+                        type: 'expense',
+                        user_id: parseInt(req.body.user_id)
+                    }
+                });
+
+                if (!otherCategory) {
+                    throw new Error('Other category not found');
+                }
+
+                // Create the expense entry
+                await prisma.expense.create({
+                    data: {
+                        amount: parseFloat(target_amount),
+                        description: `Goal achieved: ${name}`,
+                        date: new Date(),
+                        category: {
+                            connect: {
+                                category_id: otherCategory.category_id
+                            }
+                        },
+                        user: {
+                            connect: {
+                                user_id: parseInt(req.body.user_id)
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Update the goal
+            const updateData = {
+                name,
+                target_amount: target_amount ? parseFloat(target_amount) : undefined,
+                deadline: deadline ? new Date(deadline) : null,
+            };
+
+            if (achieved) {
+                updateData.achieved = true;
+                updateData.achieved_at = new Date();
+            }
 
             const updatedGoal = await prisma.goal.update({
                 where: { goal_id },
-                data: {
-                    name,
-                    target_amount: parseFloat(targetAmount),
-                    current_amount: parseFloat(currentAmount),
-                    deadline: targetDate ? new Date(targetDate) : null,
-                },
+                data: updateData,
             });
 
             res.status(200).json(updatedGoal);

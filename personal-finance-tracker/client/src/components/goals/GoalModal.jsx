@@ -4,23 +4,20 @@ import "../../styles/GoalModal.css";
 function GoalModal({ isOpen, onClose, onSubmit, initialData }) {
   const [goalName, setGoalName] = useState("");
   const [targetAmount, setTargetAmount] = useState("");
-  const [currentAmount, setCurrentAmount] = useState("");
   const [targetDate, setTargetDate] = useState("");
 
   useEffect(() => {
     if (initialData) {
       setGoalName(initialData.name || "");
-      setTargetAmount(initialData.targetAmount || "");
-      setCurrentAmount(initialData.currentAmount || "");
+      setTargetAmount(initialData.target_amount || "");
       setTargetDate(
-        initialData.targetDate
-          ? new Date(initialData.targetDate).toISOString().split("T")[0]
+        initialData.deadline
+          ? new Date(initialData.deadline).toISOString().split("T")[0]
           : ""
       );
     } else {
       setGoalName("");
       setTargetAmount("");
-      setCurrentAmount("");
       setTargetDate("");
     }
   }, [initialData]);
@@ -36,7 +33,6 @@ function GoalModal({ isOpen, onClose, onSubmit, initialData }) {
     const goalData = {
       name: goalName,
       targetAmount: parseFloat(targetAmount),
-      currentAmount: parseFloat(currentAmount) || 0, // Default to 0 if not provided
       targetDate,
     };
 
@@ -77,19 +73,8 @@ function GoalModal({ isOpen, onClose, onSubmit, initialData }) {
               onChange={(e) => setTargetAmount(e.target.value)}
               placeholder="Enter target amount"
               step="0.01"
+              min="0"
               required
-            />
-          </div>
-
-          <div className="goal-modal-field">
-            <label htmlFor="current-amount">Current Amount (₱)</label>
-            <input
-              id="current-amount"
-              type="number"
-              value={currentAmount}
-              onChange={(e) => setCurrentAmount(e.target.value)}
-              placeholder="Enter current amount (optional)"
-              step="0.01"
             />
           </div>
 
@@ -100,6 +85,7 @@ function GoalModal({ isOpen, onClose, onSubmit, initialData }) {
               type="date"
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
+              min={new Date().toISOString().split("T")[0]}
               required
             />
           </div>
