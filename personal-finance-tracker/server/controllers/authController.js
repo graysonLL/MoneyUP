@@ -189,7 +189,6 @@ const authController = {
 
   updateProfile: async (req, res) => {
     try {
-      // Get the token from the Authorization header
       const authHeader = req.headers.authorization;
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ error: 'No token provided' });
@@ -197,14 +196,14 @@ const authController = {
 
       const token = authHeader.split(' ')[1];
       
-      // Verify the token and get user data
+    
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret-key');
-      const userId = decoded.userId; // Changed from id to userId to match token structure
+      const userId = decoded.userId; 
 
-      // Get update data from request body
+ 
       const { firstName, lastName, email } = req.body;
 
-      // Check if email already exists for another user
+    
       const existingUser = await prisma.user.findUnique({
         where: { email }
       });
@@ -213,22 +212,22 @@ const authController = {
         return res.status(400).json({ error: 'Email already in use' });
       }
 
-      // Update user profile with correct field names
+
       const updatedUser = await prisma.user.update({
         where: { 
-          user_id: userId  // Changed from id to user_id
+          user_id: userId  
         },
         data: {
-          first_name: firstName,  // Changed from firstName to first_name
-          last_name: lastName,    // Changed from lastName to last_name
+          first_name: firstName, 
+          last_name: lastName,   
           email: email
         }
       });
 
-      // Remove password from response
+     
       const { password: _, ...userWithoutPassword } = updatedUser;
 
-      // Transform the response to match frontend expectations
+
       const transformedUser = {
         id: updatedUser.user_id,
         firstName: updatedUser.first_name,
@@ -236,16 +235,15 @@ const authController = {
         email: updatedUser.email
       };
 
-      // Generate new token with updated information
+    
       const newToken = jwt.sign(
-        { userId: updatedUser.user_id },  // Changed to match token structure
+        { userId: updatedUser.user_id },  
         process.env.JWT_SECRET || 'fallback-secret-key',
         { expiresIn: '24h' }
       );
 
       res.json({
-        user: transformedUser,  // Send transformed user data
-        token: newToken
+        user: transformedUser,  
       });
 
     } catch (error) {

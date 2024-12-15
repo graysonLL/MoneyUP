@@ -43,11 +43,23 @@ const RegisterForm = ({ onSubmit }) => {
       navigate('/login');
     } catch (error) {
       console.error("Registration failed:", error);
+      if (error.response?.status === 400) {
+        setErrors({
+          ...errors,
+          email: "This email is already registered. Please use a different email or login."
+        });
+      } else {
+        setErrors({
+          ...errors,
+          general: "Registration failed. Please try again later."
+        });
+      }
     }
   };
 
   return (
     <form className="form" onSubmit={handleSubmit}>
+      {errors.general && <div className="error">{errors.general}</div>}
       <input
         type="text"
         name="firstName"
