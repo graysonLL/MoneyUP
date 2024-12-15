@@ -280,3 +280,23 @@
   .goal-card.achieved .progress-bar {
     background: #4ade80;
   }
+
+  .coming-soon-banner {
+    background-color: #ffcc00;
+    color: black;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  
+  .coming-soon-banner h2 {
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  .coming-soon-banner p {
+    font-size: 1.2rem;
+    margin: 5px 0 0;
+  }
+  
