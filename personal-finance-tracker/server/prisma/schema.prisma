@@ -74,6 +74,7 @@ model Goal {
   current_amount Decimal   @db.Decimal(10, 2) // The current amount achieved for the goal
   deadline       DateTime?
   created_at     DateTime  @default(now())
+  achieved       Boolean   @default(false)
 
   user User @relation(fields: [user_id], references: [user_id])
 

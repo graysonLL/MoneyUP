@@ -1,90 +1,176 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useAuth } from '../contexts/AuthContext';
-import '../styles/Goals.css';
+import React, { useState, useEffect } from "react";
+import "../styles/Goals.css";
+import { useAuth } from "../contexts/AuthContext";
+import axios from "axios";
+import GoalModal from "../components/goals/GoalModal";
 
 const Goals = ({ isSidebarOpen }) => {
+  const { user } = useAuth();
   const [goals, setGoals] = useState([]);
+  const [summary, setSummary] = useState({
+    currentBalance: 0,
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentBalance, setCurrentBalance] = useState(100); // Setting 10,000 for testing
-  const { token } = useAuth();
+  const [selectedGoal, setSelectedGoal] = useState(null);
+  const [fundInputs, setFundInputs] = useState({});
 
-  const GoalModal = ({ isOpen, onClose, onSubmit }) => {
-    const [formData, setFormData] = useState({
-      name: '',
-      targetAmount: '',
-      targetDate: new Date().toISOString().split('T')[0]
-    });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch goals
+        const goalsResponse = await axios.get(
+          `http://localhost:3001/api/goals/user/${user.id}`
+        );
+        setGoals(goalsResponse.data);
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      // Add API call here to save the goal
-      onSubmit(formData);
-      onClose();
+        // Fetch financial data for current balance
+        const [incomeRes, expenseRes] = await Promise.all([
+          axios.get(`http://localhost:3001/api/income/user/${user.id}`),
+          axios.get(`http://localhost:3001/api/expense/user/${user.id}`),
+        ]);
+
+        const incomes = incomeRes.data;
+        const expenses = expenseRes.data;
+
+        const totalIncome = incomes.reduce(
+          (sum, income) => sum + Number(income.amount),
+          0
+        );
+        const totalExpenses = expenses.reduce(
+          (sum, expense) => sum + Number(expense.amount),
+          0
+        );
+
+        const currentBalance = totalIncome - totalExpenses;
+
+        setSummary({
+          currentBalance,
+        });
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
     };
 
-    if (!isOpen) return null;
+    if (user?.id) {
+      fetchData();
+    }
+  }, [user]);
 
-    return (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h2>Create New Goal</h2>
-            <button className="close-btn" onClick={onClose}>&times;</button>
-          </div>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Goal Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="targetAmount">Target Amount (₱)</label>
-              <input
-                type="number"
-                id="targetAmount"
-                name="targetAmount"
-                value={formData.targetAmount}
-                onChange={(e) => setFormData({...formData, targetAmount: e.target.value})}
-                required
-                min="0"
-                step="0.01"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="targetDate">Target Date</label>
-              <input
-                type="date"
-                id="targetDate"
-                name="targetDate"
-                value={formData.targetDate}
-                onChange={(e) => setFormData({...formData, targetDate: e.target.value})}
-                required
-              />
-            </div>
-            <div className="modal-actions">
-              <button type="button" onClick={onClose}>Cancel</button>
-              <button type="submit">Create Goal</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
+  const handleGoalSubmit = async (goalData) => {
+    try {
+      if (selectedGoal) {
+        const response = await axios.put(
+          `http://localhost:3001/api/goals/${selectedGoal.goal_id}`,
+          { ...goalData, user_id: user.id }
+        );
+        setGoals((prevGoals) =>
+          prevGoals.map((goal) =>
+            goal.goal_id === selectedGoal.goal_id ? response.data : goal
+          )
+        );
+      } else {
+        const response = await axios.post(
+          `http://localhost:3001/api/goals`,
+          { ...goalData, user_id: user.id }
+        );
+        setGoals((prevGoals) => [response.data, ...prevGoals]);
+      }
+      setIsModalOpen(false);
+      setSelectedGoal(null);
+    } catch (error) {
+      console.error("Failed to save goal:", error);
+      alert("Failed to save goal");
+    }
   };
 
-  const handleGoalSubmit = (formData) => {
-    const newGoal = {
-      ...formData,
-      id: Date.now(),
-      achieved: false
-    };
-    setGoals([...goals, newGoal]);
+  const handleEditGoal = (goal) => {
+    setSelectedGoal(goal);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteGoal = async (goalId) => {
+    if (window.confirm("Are you sure you want to delete this goal?")) {
+      try {
+        await axios.delete(`http://localhost:3001/api/goals/${goalId}`);
+        setGoals((prevGoals) => prevGoals.filter((goal) => goal.goal_id !== goalId));
+      } catch (error) {
+        console.error("Failed to delete goal:", error);
+        alert("Failed to delete goal");
+      }
+    }
+  };
+
+  const handleAddFunds = async (goalId, amount) => {
+    const numAmount = parseFloat(amount);
+    if (isNaN(numAmount) || numAmount <= 0) {
+      alert("Please enter a valid amount");
+      return;
+    }
+
+    if (numAmount > summary.currentBalance) {
+      alert("Insufficient balance");
+      return;
+    }
+
+    try {
+      const goal = goals.find((g) => g.goal_id === goalId);
+      const updatedGoal = {
+        ...goal,
+        currentAmount: (goal.currentAmount || 0) + numAmount,
+      };
+
+      // Create an expense for the funds added to goal
+      await axios.post(`http://localhost:3001/api/expense`, {
+        user_id: user.id,
+        amount: numAmount,
+        category: "Goal Funding",
+        description: `Funds added to goal: ${goal.name}`,
+      });
+
+      // Update the goal in the backend
+      const response = await axios.put(
+        `http://localhost:3001/api/goals/${goalId}`,
+        updatedGoal
+      );
+
+      // Update local states
+      setGoals((prevGoals) =>
+        prevGoals.map((g) => (g.goal_id === goalId ? response.data : g))
+      );
+      setSummary((prev) => ({
+        ...prev,
+        currentBalance: prev.currentBalance - numAmount,
+      }));
+
+      // Clear the input
+      setFundInputs((prev) => ({ ...prev, [goalId]: "" }));
+    } catch (error) {
+      console.error("Failed to add funds:", error);
+      alert("Failed to add funds");
+    }
+  };
+
+  // Handle input change for fund amounts
+  const handleFundInputChange = (goalId, value) => {
+    setFundInputs(prev => ({
+      ...prev,
+      [goalId]: value
+    }));
+  };
+
+  const handleMarkAchieved = async (goal) => {
+    const updatedGoal = { ...goal, achieved: true };
+    try {
+      const response = await axios.put(
+        `http://localhost:3001/api/goals/${goal.goal_id}`,
+        updatedGoal
+      );
+      setGoals((prevGoals) =>
+        prevGoals.map((g) => (g.goal_id === goal.goal_id ? response.data : g))
+      );
+    } catch (error) {
+      console.error("Failed to mark goal as achieved:", error);
+    }
   };
 
   return (
@@ -95,7 +181,13 @@ const Goals = ({ isSidebarOpen }) => {
           <div className="goals-header-right">
             <div className="current-balance">
               <span className="balance-label">Current Balance:</span>
-              <span className="balance-amount">₱{currentBalance.toLocaleString()}</span>
+              <span className="balance-amount">
+                ₱
+                {summary.currentBalance.toLocaleString("en-PH", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
             </div>
             <button className="add-goal-btn" onClick={() => setIsModalOpen(true)}>
               + Add Goal
@@ -104,42 +196,76 @@ const Goals = ({ isSidebarOpen }) => {
         </div>
 
         <div className="goals-grid">
-          {goals.map((goal) => (
-            <div key={goal.id} className={`goal-card ${goal.achieved ? 'achieved' : ''}`}>
+          {goals?.map((goal) => (
+            <div key={goal.goal_id} className={`goal-card ${goal.achieved ? "achieved" : ""}`}>
               <div className="goal-header">
                 <h3>{goal.name}</h3>
-                <span className="goal-date">Target: {new Date(goal.targetDate).toLocaleDateString()}</span>
+                <div className="goal-actions">
+                  <button 
+                    className="edit-btn"
+                    onClick={() => handleEditGoal(goal)}
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    className="delete-btn"
+                    onClick={() => handleDeleteGoal(goal.goal_id)}
+                  >
+                    🗑️
+                  </button>
+                </div>
               </div>
+              <span className="goal-date">
+                Target: {new Date(goal.targetDate).toLocaleDateString()}
+              </span>
               <div className="goal-progress-container">
                 <div className="goal-progress">
-                  <div 
+                  <div
                     className="progress-bar"
-                    style={{width: `${(currentBalance / goal.targetAmount) * 100}%`}}
+                    style={{ width: `${((goal.currentAmount || 0) / (goal.targetAmount || 1)) * 100}%` }}
                   />
                 </div>
                 <span className="progress-text">
-                  {((currentBalance / goal.targetAmount) * 100).toFixed(1)}%
+                  {((goal.currentAmount || 0) / (goal.targetAmount || 1) * 100).toFixed(1)}%
                 </span>
               </div>
               <div className="goal-amounts">
                 <div className="amount-item">
-                  <span className="amount-label">Current Balance</span>
-                  <span className="amount-value current">₱{currentBalance.toLocaleString()}</span>
+                  <span className="amount-label">Current</span>
+                  <span className="amount-value current">
+                    ₱{(goal.currentAmount || 0).toLocaleString()}
+                  </span>
                 </div>
                 <div className="amount-item">
                   <span className="amount-label">Target</span>
-                  <span className="amount-value target">₱{parseFloat(goal.targetAmount).toLocaleString()}</span>
+                  <span className="amount-value target">
+                    ₱{(goal.targetAmount || 0).toLocaleString()}
+                  </span>
                 </div>
               </div>
-              {currentBalance >= goal.targetAmount && !goal.achieved ? (
-                <button 
+              {summary.currentBalance > 0 && goal.currentAmount < goal.targetAmount && !goal.achieved && (
+                <div className="add-funds-form">
+                  <input
+                    type="number"
+                    placeholder="Amount to add"
+                    min="0"
+                    max={Math.min(summary.currentBalance, goal.targetAmount - (goal.currentAmount || 0))}
+                    value={fundInputs[goal.goal_id] || ''}
+                    onChange={(e) => handleFundInputChange(goal.goal_id, e.target.value)}
+                  />
+                  <button
+                    className="add-funds-btn"
+                    onClick={() => handleAddFunds(goal.goal_id, fundInputs[goal.goal_id])}
+                    disabled={!fundInputs[goal.goal_id] || parseFloat(fundInputs[goal.goal_id]) <= 0}
+                  >
+                    Add Funds
+                  </button>
+                </div>
+              )}
+              {goal.currentAmount >= goal.targetAmount && !goal.achieved ? (
+                <button
                   className="mark-achieved-btn"
-                  onClick={() => {
-                    const updatedGoals = goals.map(g => 
-                      g.id === goal.id ? { ...g, achieved: true } : g
-                    );
-                    setGoals(updatedGoals);
-                  }}
+                  onClick={() => handleMarkAchieved(goal)}
                 >
                   Mark Goal as Achieved 🎉
                 </button>
@@ -154,8 +280,12 @@ const Goals = ({ isSidebarOpen }) => {
 
         <GoalModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedGoal(null);
+          }}
           onSubmit={handleGoalSubmit}
+          initialData={selectedGoal}
         />
       </div>
     </div>
