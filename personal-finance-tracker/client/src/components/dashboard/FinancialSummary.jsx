@@ -101,12 +101,23 @@ const FinancialSummary = () => {
           </div>
           {summary.lastTransaction && (
             <div className="timestamp">
-              {summary.lastTransaction.type === "expense" ? "-" : "+"}₱
-              {Number(summary.lastTransaction.amount).toLocaleString("en-PH", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}{" "}
-              {summary.lastTransaction.time}
+              <span
+                className={
+                  summary.lastTransaction.type === "expense"
+                    ? "expense"
+                    : "income"
+                }
+              >
+                {summary.lastTransaction.type === "expense" ? "-" : "+"}₱
+                {Number(summary.lastTransaction.amount).toLocaleString(
+                  "en-PH",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )}
+              </span>{" "}
+              <span className="time">{summary.lastTransaction.time}</span>
             </div>
           )}
         </div>
