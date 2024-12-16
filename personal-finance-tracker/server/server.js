@@ -22,7 +22,7 @@ app.use("/api/income", incomeRoutes);
 const expenseRoutes = require("./routes/expenseRoutes");
 app.use("/api/expense", expenseRoutes);
 
-const categoryRoutes = require("./routes/expenseRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 app.use("/api/category", categoryRoutes);
 
 const transactionRoutes = require("./routes/transactionRoutes");
@@ -32,23 +32,12 @@ const goalRoutes = require("./routes/goalRoutes");
 app.use("/api/goals", goalRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Welcome to the Personal Finance Tracker API!");
+  res.send("Welcome to the MoneyUP API!");
 });
 
 app.get("/api/test", (req, res) => {
   res.json({ message: "API is working" });
 });
-
-app.get("/api/categories", async (req, res) => {
-  try {
-    const categories = await prisma.category.findMany();
-    res.status(200).json(categories);
-  } catch (err) {
-    console.error("Error fetching categories:", err);
-    res.status(500).json({ error: "Error fetching categories" });
-  }
-});
-
 
 
 const port = process.env.PORT || 3001;

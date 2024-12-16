@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
-import { jwtDecode } from 'jwt-decode';
 
 const IncomeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [formData, setFormData] = useState({
@@ -12,35 +11,22 @@ const IncomeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   });
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
-  const { token } = useAuth();
+  const { token, user } = useAuth();
 
-  // Function to get userId from token
-  const getUserIdFromToken = () => {
-    const token = localStorage.getItem('token');
-    if (!token) return null;
-    
-    try {
-      const decoded = jwtDecode(token);
-      return decoded.userId;
-    } catch (err) {
-      console.error('Error decoding token:', err);
-      return null;
-    }
-  };
-
-  // Fetch income categories when component mounts
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:3001/api/categories',
+          'http://localhost:3001/api/category',
           {
             headers: {
               Authorization: `Bearer ${token}`
             }
           }
         );
-        const incomeCategories = response.data.filter(category => category.type === 'income');
+        const incomeCategories = response.data.filter(category => 
+          category.type === 'income' && category.user_id === user.id
+        );
         setCategories(incomeCategories);
       } catch (err) {
         setError('Failed to fetch categories');
@@ -51,7 +37,7 @@ const IncomeModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     if (isOpen) {
       fetchCategories();
     }
-  }, [isOpen, token]);
+  }, [isOpen, token, user.id]);
 
   useEffect(() => {
     if (initialData) {

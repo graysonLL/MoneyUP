@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
-import { jwtDecode } from 'jwt-decode';
 
 const ExpenseModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [formData, setFormData] = useState({
@@ -12,35 +11,23 @@ const ExpenseModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   });
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
-  const { token } = useAuth();
-
-  // Function to get userId from token
-  const getUserIdFromToken = () => {
-    const token = localStorage.getItem('token');
-    if (!token) return null;
-    
-    try {
-      const decoded = jwtDecode(token);
-      return decoded.userId;
-    } catch (err) {
-      console.error('Error decoding token:', err);
-      return null;
-    }
-  };
+  const { token, user } = useAuth();
 
   // Fetch expense categories when component mounts
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:3001/api/categories',
+          'http://localhost:3001/api/category',
           {
             headers: {
               Authorization: `Bearer ${token}`
             }
           }
         );
-        const expenseCategories = response.data.filter(category => category.type === 'expense');
+        const expenseCategories = response.data.filter(category => 
+          category.type === 'expense' && category.user_id === user.id
+        );
         setCategories(expenseCategories);
       } catch (err) {
         setError('Failed to fetch categories');
@@ -51,7 +38,7 @@ const ExpenseModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     if (isOpen) {
       fetchCategories();
     }
-  }, [isOpen, token]);
+  }, [isOpen, token, user.id]);
 
   useEffect(() => {
     if (initialData) {
@@ -81,7 +68,6 @@ const ExpenseModal = ({ isOpen, onClose, onSubmit, initialData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ensure amount is a number and properly formatted
     const formattedData = {
       ...formData,
       amount: Number(formData.amount),
@@ -97,7 +83,7 @@ const ExpenseModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Add New expense</h2>
+          <h2>Add New Expense</h2>
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
         {error && <div className="error-message">{error}</div>}
@@ -170,7 +156,7 @@ const ExpenseModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2"
             >
-              Add expense
+              Add Expense
             </button>
           </div>
         </form>
