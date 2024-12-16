@@ -1,0 +1,137 @@
+.goal-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+  }
+  
+  .goal-modal {
+    background-color: #1e2330;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .goal-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .goal-modal-header h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+  }
+  
+  .goal-modal-close-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s;
+    border-radius: 0.375rem;
+  }
+  
+  .goal-modal-close-btn:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .goal-modal-field {
+    margin-bottom: 1.5rem;
+  }
+  
+  .goal-modal-field label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #94a3b8;
+  }
+  
+  .goal-modal-field input {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #2d3748;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: #fff;
+    transition: all 0.2s;
+  }
+  
+  .goal-modal-field input:focus {
+    outline: none;
+    border-color: #9333ea;
+    box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.2);
+  }
+  
+  .goal-modal-field input::placeholder {
+    color: #64748b;
+  }
+  
+  .goal-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .goal-modal-cancel-btn,
+  .goal-modal-submit-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .goal-modal-cancel-btn {
+    background-color: #2d3748;
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .goal-modal-cancel-btn:hover {
+    background-color: #374151;
+    color: #fff;
+  }
+  
+  .goal-modal-submit-btn {
+    background-color: #9333ea;
+    color: white;
+    border: none;
+  }
+  
+  .goal-modal-submit-btn:hover {
+    background-color: #7e22ce;
+  }
+  
+  /* Date input dark mode support */
+  .goal-modal-field input[type="date"] {
+    color-scheme: dark;
+  }
+  
+  /* Remove number input spinners */
+  .goal-modal-field input[type="number"]::-webkit-inner-spin-button,
+  .goal-modal-field input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
