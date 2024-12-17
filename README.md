@@ -1,5 +1,7 @@
 # MoneyUP
 
+link to app : https://moneyup.ngrok.app/
+
 A personal financial tracker that allows users to manage their income, expenses, and financial goals. The app provides an intuitive interface to track finances and helps users achieve their financial targets (soon to be implemented).
 
 ## Features
