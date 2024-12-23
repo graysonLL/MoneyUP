@@ -2,14 +2,14 @@
 
 link to app : https://moneyup.ngrok.app/
 
-A personal financial tracker that allows users to manage their income, expenses, and financial goals. The app provides an intuitive interface to track finances and helps users achieve their financial targets (soon to be implemented).
+A personal financial tracker that allows users to manage their income, expenses, and financial goals. The app provides an intuitive interface to track finances and helps users achieve their financial targets.
 
 ## Features
 
 - **User Management**: Register and authenticate users securely.
 - **Income & Expense Tracking**: Record and categorize income and expenses.
 - **Categories**: Customize categories for both income and expenses.
-- **Goals**: Set financial goals and track progress towards them. (to be implemented in the future)
+- **Goals**: Set financial goals and track progress towards them. 
 - **Rate Limiting**: Protects against abuse with rate-limiting.
 - **Form Validation**: Uses JOI for data validation.
 
